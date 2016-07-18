@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<title>New Expense</title>
+<link rel=stylesheet type=text/css href='{{ url_for('static',filename='styles.css')}}'>
+<div class=page>
+  <h1>Submit new expense</h1>
+  <div class=new-expense>
+
+    <form id='new_expense_form' method='post' action='submit_expense' >
+      <p>
+    Person:     <select name='account'>
+                    <option value='together'>Together</option>
+                    <option value='leeor'>Leeor</option>
+                    <option value='marie'>Marie</option>
+                </select>
+    Date:       <input type='date' name='expense_date' />
+    Amount:     <input type='text' name='amount' />
+    Account:      <select name='account'>
+                {% for account, acct_name in accounts.items() %}
+                    <option value='{{ account }}'>{{ acct_name }}</option>
+                {% endfor %}
+                </select>
+    Category:   <select name='category'>
+                {% for category, cat_name in categories.items() %}
+                    <option value='{{ category }}'>{{ cat_name }}</option>
+                {% endfor %}
+                </select>
+                <input type='submit' value='Submit' />
+      </p>
+    </form>
+
+  </div>
+</div>
+</html>
