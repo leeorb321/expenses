@@ -1,8 +1,8 @@
 from flask import Flask, render_template, request, redirect
-from init_db import connect
+from db import connect, new_expense, display_data
 app = Flask(__name__)
 
-app.vars = {}
+persons, categories = connect()
 
 @app.route('/')
 def index():
@@ -15,35 +15,39 @@ def submit_page():
     if request.method == 'GET':
         return render_template(
             'submit_expense.html',
-            categories={'food': 'Food',
-                        'home': 'Home',
-                        'dining': 'Dining'
-                        'add_new': 'Add New Category'
-                        },
-            accounts={'citi_checking': 'Citibank Checking',
-                        'amex': 'American Express'
-                    }
+            categories=categories,
+            persons=persons
         )
     elif request.method == 'POST':
-        app.vars['account'] = request.form['account']
-        app.vars['expense_date'] = request.form['expense_date']
-        app.vars['amount'] = int(float(request.form['amount'])*100)
-        app.vars['category'] = request.form['category']
+        person = request.form['person']
+        expense_date = request.form['expense_date']
+        amount = int(float(request.form['amount'])*100)
+        category = request.form['category']
+        description = request.form['description']
 
-        f = open('temp.txt', 'w')
-        f.write('Person: %s\n' % app.vars['person'])
-        f.write('Date: %s\n' % app.vars['expense_date'])
-        f.write('Amount: %d\n' % app.vars['amount'])
-        f.write('Category: %s\n' % app.vars['category'])
-        f.write('Account: %s\n' % app.vars['account'])
-        f.close()
+        new_expense(person, expense_date, amount, category, description)
 
         return redirect('/')
 
-@app.route('/get_data', methods=['GET'])
-def retrieve_data():
-    pass
+@app.route('/show_data', methods=['GET', 'POST'])
+def show_data():
+    if request.method == 'GET':
+        return render_template(
+            'show_data.html',
+            categories=categories,
+            persons=persons
+        )
+    elif request.method == 'POST':
+        from_date = request.form['from_date']
+        to_date = request.form['to_date']
+        category = request.form['category']
+        person = request.form['person']
 
+        data = display_data(from_date, to_date, category=None, person=None)
+
+        return render_template(
+            'display_data.html',
+            data=data)
 
 if __name__ == '__main__':
     app.run(debug=True)

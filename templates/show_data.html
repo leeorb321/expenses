@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<title>Explore Data</title>
+<link rel=stylesheet type=text/css href='{{ url_for('static',filename='styles.css')}}'>
+<div class=page>
+  <h1>Explore Data</h1>
+  <div class=new-expense>
+
+    <form id='display-data' method='post' action='show_data' >
+      <p>
+    From:       <input type='date' name='from_date' />
+    To:         <input type='date' name='to_date' />
+    Category: <select name='category'>
+                {% for category in categories %}
+                    <option value='{{ category }}'>{{ category.capitalize() }}</option>
+                {% endfor %}
+                    <option value='all'>All</option>
+                </select>
+    Person:    <select name='person'>
+                {% for person in persons %}
+                    <option value='{{ person }}'>{{ person.capitalize() }}</option>
+                {% endfor %}
+                    <option value='all'>All</option>
+                </select>
+                <input type='submit' value='Submit' />
+    </p>
+    </form>
+
+  </div>
+</div>
+</html>

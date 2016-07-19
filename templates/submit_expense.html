@@ -7,24 +7,22 @@
 
     <form id='new_expense_form' method='post' action='submit_expense' >
       <p>
-    Person:     <select name='account'>
-                    <option value='together'>Together</option>
-                    <option value='leeor'>Leeor</option>
-                    <option value='marie'>Marie</option>
+    Person:     <select name='person'>
+                {% for person in persons %}
+                    <option value='{{ person }}'>{{ person.capitalize() }}</option>
+                {% endfor %}
                 </select>
     Date:       <input type='date' name='expense_date' />
     Amount:     <input type='text' name='amount' />
-    Account:      <select name='account'>
-                {% for account, acct_name in accounts.items() %}
-                    <option value='{{ account }}'>{{ acct_name }}</option>
-                {% endfor %}
-                </select>
+    </p><p>
     Category:   <select name='category'>
-                {% for category, cat_name in categories.items() %}
-                    <option value='{{ category }}'>{{ cat_name }}</option>
+                {% for category in categories %}
+                    <option value='{{ category }}'>{{ category.capitalize() }}</option>
                 {% endfor %}
                 </select>
-                <input type='submit' value='Submit' />
+    Description: <input type='text' name='description' />
+                 <input type='submit' value='Submit' />
+
       </p>
     </form>
 
