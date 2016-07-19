@@ -1,6 +1,19 @@
+import sys
 import psycopg2
 
+def create_db():
+    try:
+        conn = psycopg2.connect(database="expenses", user="Leeor", password="password")
+    except psycopg2.OperationalError as e:
+        if 'does not exist' in str(e):
+            conn = psycopg2.connect(database="postgres", user="Leeor", password="password")
+            cur = conn.cursor()
+            cur.execute('CREATE DATABASE expenses')
+            conn.commit()
+            conn.close()
+
 def connect():
+    create_db()
     try:
         conn = psycopg2.connect(database="expenses", user="Leeor", password="password")
         cur = conn.cursor()
@@ -86,16 +99,39 @@ def display_data(from_date, to_date, category, person):
     conn = psycopg2.connect(database="expenses", user="Leeor", password="password")
     cur = conn.cursor()
     out = []
-    cur.execute('''
-        SELECT txn_date, amount, cat_name, description, person_name
-        FROM ledger
-        JOIN persons
-            ON ledger.person_id=persons.id
-        JOIN categories
-            ON ledger.category_id=categories.id
-        WHERE txn_date > '%s' AND txn_date < '%s'
-        ''' % (from_date, to_date))
-    results = cur.fetchall()
+
+    if category == 'all' and person == 'all':
+        cur.execute('''
+            SELECT txn_date, amount, cat_name, description, person_name
+            FROM ledger
+            JOIN persons
+                ON ledger.person_id=persons.id
+            JOIN categories
+                ON ledger.category_id=categories.id
+            WHERE txn_date > '%s' AND txn_date < '%s'
+            ''' % (from_date, to_date))
+        results = cur.fetchall()
+    elif category != 'all':
+        cur.execute('''
+            SELECT txn_date, amount, cat_name, description, person_name
+            FROM ledger
+            JOIN persons
+                ON ledger.person_id=persons.id
+            JOIN categories
+                ON ledger.category_id=categories.id
+            WHERE txn_date > '%s' AND txn_date < '%s' AND cat_name == '%s'
+            ''' % (from_date, to_date, category))
+    elif person != 'all':
+        cur.execute('''
+            SELECT txn_date, amount, cat_name, description, person_name
+            FROM ledger
+            JOIN persons
+                ON ledger.person_id=persons.id
+            JOIN categories
+                ON ledger.category_id=categories.id
+            WHERE txn_date > '%s' AND txn_date < '%s' AND person_name == '%s'
+            ''' % (from_date, to_date, person))
+
     for row in results:
         row = list(row)
         row[1] = float(row[1])/100
@@ -106,11 +142,3 @@ def display_data(from_date, to_date, category, person):
     conn.commit()
     conn.close()
     return out
-
-    # if category != None and person != None:
-    # cur.execute('''WITH category AS (SELECT id FROM categories WHERE name='%s'),
-    #                     person AS (SELECT id FROM persons WHERE name='%s')
-    #                 SELECT * FROM ledger WHERE
-    #                 ''')
-
-    # % (category, person)
