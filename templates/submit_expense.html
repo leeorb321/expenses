@@ -1,31 +1,31 @@
-<!DOCTYPE html>
-<title>New Expense</title>
-<link rel=stylesheet type=text/css href='{{ url_for('static',filename='styles.css')}}'>
-<div class=page>
-  <h1>Submit new expense</h1>
-  <div class=new-expense>
+{% extends "layout.html" %}
+{% block title %}New Expense{% endblock %}
+{% block content %}
+  <div class=page>
+    <h1>Submit new expense</h1>
+    <div class=new-expense>
 
-    <form id='new_expense_form' method='post' action='submit_expense' >
-      <p>
-    Person:     <select name='person'>
-                {% for person in persons %}
-                    <option value='{{ person }}'>{{ person.capitalize() }}</option>
-                {% endfor %}
-                </select>
-    Date:       <input type='date' name='expense_date' />
-    Amount:     <input type='text' name='amount' />
-    </p><p>
-    Category:   <select name='category'>
-                {% for category in categories %}
-                    <option value='{{ category }}'>{{ category.capitalize() }}</option>
-                {% endfor %}
-                </select>
-    Description: <input type='text' name='description' />
-                 <input type='submit' value='Submit' />
+      <form id='new_expense_form' method='post' action='submit_expense' >
+        <p>
+      Person:     <select name='person'>
+                  {% for person in persons %}
+                      <option value='{{ person }}'>{{ person.capitalize() }}</option>
+                  {% endfor %}
+                  </select>
+      Date:       <input type='date' name='expense_date' />
+      Amount:     <input type='text' name='amount' />
+      </p><p>
+      Category:   <select name='category'>
+                  {% for category in categories %}
+                      <option value='{{ category }}'>{{ category.capitalize() }}</option>
+                  {% endfor %}
+                  </select>
+      Description: <input type='text' name='description' />
+                  <input type='submit' value='Submit' />
 
-      </p>
-    </form>
+        </p>
+      </form>
 
+    </div>
   </div>
-</div>
-</html>
+{% endblock %}

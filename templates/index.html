@@ -1,9 +1,11 @@
-<!DOCTYPE html>
-<title>Expense Tracker</title>
-<link rel=stylesheet type=text/css href='{{ url_for('static',filename='styles.css')}}'>
-<div class=page>
-  <h1>Expense Tracker</h1>
-    <p><a href="{{ url_for('submit_page') }}">Submit New Expense</a></p>
-    <p><a href="{{ url_for('show_data') }}">Retrieve Data</a></p>
-</div>
-</html>
+{% extends "layout.html" %}
+{% block title %}{% endblock %}
+
+
+{% block content %}
+  <div class=page>
+    <h1>Expense Tracker</h1>
+      <p><a href="{{ url_for('submit_page') }}">Submit New Expense</a></p>
+      <p><a href="{{ url_for('retrieve_data') }}">Retrieve Data</a></p>
+  </div>
+{% endblock %}

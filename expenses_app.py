@@ -29,11 +29,11 @@ def submit_page():
 
         return redirect('/')
 
-@app.route('/show_data', methods=['GET', 'POST'])
-def show_data():
+@app.route('/retrieve_data', methods=['GET', 'POST'])
+def retrieve_data():
     if request.method == 'GET':
         return render_template(
-            'show_data.html',
+            'retrieve_data.html',
             categories=categories,
             persons=persons
         )
@@ -42,12 +42,14 @@ def show_data():
         to_date = request.form['to_date']
         category = request.form['category']
         person = request.form['person']
+        sort_by = request.form['sort_by']
 
-        data = display_data(from_date, to_date, category=None, person=None)
+        data, total = display_data(category, person, from_date, to_date, sort_by)
 
         return render_template(
             'display_data.html',
-            data=data)
+            data=data,
+            total=total)
 
 if __name__ == '__main__':
     app.run(debug=True)

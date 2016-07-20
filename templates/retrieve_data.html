@@ -1,0 +1,34 @@
+{% extends "layout.html" %}
+{% block title %}Show Data{% endblock %}
+{% block content %}
+  <h1>Show Data</h1>
+    <div class=page>
+    <div class=new-expense>
+      <form id='display-data' method='post' action='retrieve_data' >
+        <p>
+      From:       <input type='date' name='from_date' />
+      To:         <input type='date' name='to_date' />
+      Category: <select name='category'>
+                      <option value='all'>All</option>
+                  {% for category in categories %}
+                      <option value='{{ category }}'>{{ category.capitalize() }}</option>
+                  {% endfor %}
+                  </select>
+      Person:    <select name='person'>
+                      <option value='all'>All</option>
+                  {% for person in persons %}
+                      <option value='{{ person }}'>{{ person.capitalize() }}</option>
+                  {% endfor %}
+                  </select>
+      Sort by:    <select name='sort_by'>
+                    <option value='date'>Date</option>
+                    <option value='category'>Category</option>
+                    <option value='amount'>Amount</option>
+                    <option value='person'>Person</option>
+                  </select>
+                  <input type='submit' value='Submit' />
+      </p>
+      </form>
+    </div>
+    </div>
+{% endblock %}

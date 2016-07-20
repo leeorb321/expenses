@@ -1,0 +1,14 @@
+<!doctype html>
+<html>
+  <head>
+    {% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="icon" type="image/png" href='{{ url_for('static',filename='favicon.ico')}}'>
+    <title>{% block title %}{% endblock %} - Expense Tracker</title>
+    {% endblock %}
+  </head>
+  <body>
+    <div id="content">{% block content %}{% endblock %}</div>
+    <div id="footer"></div>
+  </body>
+</html>

@@ -1,30 +1,32 @@
-<!DOCTYPE html>
-<title>Display Data</title>
-<link rel=stylesheet type=text/css href='{{ url_for('static',filename='styles.css')}}'>
-<div class=page>
+{% extends "layout.html" %}
+{% block title %}Display Data{% endblock %}
+
+
+{% block content %}
+  <div class=page>
   <h1>Display Data</h1>
-  <div class=new-expense>
+    <div class=new-expense>
 
-    <table border="1"><tr>
-        <th>Transaction Date</th>
-        <th>Amount</th>
-        <th>Category</th>
-        <th>Description</th>
-        <th>Person</th>
-        </tr>
-        <tbody>
-            {% for row in data %}
-            <tr>
-                <td>{{ row[0] }}</td>
-                <td>{{ row[1] }}</td>
-                <td>{{ row[2] }}</td>
-                <td>{{ row[3] }}</td>
-                <td>{{ row[4] }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-
-  </div>
-</div>
-</html>
+      <table border="1"><tr>
+          <th>Transaction Date</th>
+          <th>Amount</th>
+          <th>Category</th>
+          <th>Description</th>
+          <th>Person</th>
+          </tr>
+          <tbody>
+              {% for row in data %}
+              <tr>
+                  <td>{{ row[0] }}</td>
+                  <td>{{ "${:.2f}".format(row[1]) }}</td>
+                  <td>{{ row[2] }}</td>
+                  <td>{{ row[3] }}</td>
+                  <td>{{ row[4] }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+        </table>
+        <p>Total: {{ "${:.2f}".format(total) }}</p>
+    </div>
+    </div>
+{% endblock %}

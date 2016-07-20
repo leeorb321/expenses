@@ -1,19 +1,7 @@
 import sys
 import psycopg2
 
-def create_db():
-    try:
-        conn = psycopg2.connect(database="expenses", user="Leeor", password="password")
-    except psycopg2.OperationalError as e:
-        if 'does not exist' in str(e):
-            conn = psycopg2.connect(database="postgres", user="Leeor", password="password")
-            cur = conn.cursor()
-            cur.execute('CREATE DATABASE expenses')
-            conn.commit()
-            conn.close()
-
 def connect():
-    create_db()
     try:
         conn = psycopg2.connect(database="expenses", user="Leeor", password="password")
         cur = conn.cursor()
@@ -56,10 +44,6 @@ def connect():
         print('Error %s' % e)
         sys.exit(1)
 
-    finally:
-        if conn:
-            conn.close()
-
 def new_expense(person, expense_date, amount, category, description):
     try:
         conn = psycopg2.connect(database="expenses", user="Leeor", password="password")
@@ -75,10 +59,6 @@ def new_expense(person, expense_date, amount, category, description):
         print('Error %s' % e)
         sys.exit(1)
 
-    finally:
-        if conn:
-            conn.close()
-
 def add_category(category_name):
     try:
         conn = psycopg2.connect(database="expenses", user="Leeor", password="password")
@@ -91,54 +71,64 @@ def add_category(category_name):
         print('Error %s' % e)
         sys.exit(1)
 
-    finally:
-        if conn:
-            conn.close()
-
-def display_data(from_date, to_date, category, person):
+def display_data(category, person, from_date, to_date, sort_by):
     conn = psycopg2.connect(database="expenses", user="Leeor", password="password")
     cur = conn.cursor()
     out = []
 
-    if category == 'all' and person == 'all':
-        cur.execute('''
+    if from_date == '':
+        cur.execute("SELECT min(txn_date) FROM ledger")
+        from_date = cur.fetchone()[0]
+
+    if to_date == '':
+        cur.execute("SELECT max(txn_date) FROM ledger")
+        to_date = cur.fetchone()[0]
+
+
+
+
+    basic_query = '''
             SELECT txn_date, amount, cat_name, description, person_name
             FROM ledger
             JOIN persons
                 ON ledger.person_id=persons.id
             JOIN categories
                 ON ledger.category_id=categories.id
-            WHERE txn_date > '%s' AND txn_date < '%s'
-            ''' % (from_date, to_date))
+            WHERE txn_date >= '%s' AND txn_date <= '%s'
+            ''' % (from_date, to_date)
+
+    if category == 'all' and person == 'all':
+        cur.execute(basic_query)
+        results = cur.fetchall()
+    elif category != 'all' and person != 'all':
+        cur.execute(basic_query + "AND cat_name = '%s' AND person_name = '%s'" % (category, person))
         results = cur.fetchall()
     elif category != 'all':
-        cur.execute('''
-            SELECT txn_date, amount, cat_name, description, person_name
-            FROM ledger
-            JOIN persons
-                ON ledger.person_id=persons.id
-            JOIN categories
-                ON ledger.category_id=categories.id
-            WHERE txn_date > '%s' AND txn_date < '%s' AND cat_name == '%s'
-            ''' % (from_date, to_date, category))
+        cur.execute(basic_query + "AND cat_name = '%s'" % category)
+        results = cur.fetchall()
     elif person != 'all':
-        cur.execute('''
-            SELECT txn_date, amount, cat_name, description, person_name
-            FROM ledger
-            JOIN persons
-                ON ledger.person_id=persons.id
-            JOIN categories
-                ON ledger.category_id=categories.id
-            WHERE txn_date > '%s' AND txn_date < '%s' AND person_name == '%s'
-            ''' % (from_date, to_date, person))
+        cur.execute(basic_query + "AND person_name = '%s'" % person)
+        results = cur.fetchall()
 
     for row in results:
         row = list(row)
         row[1] = float(row[1])/100
+        row = [ row[i].capitalize() if type(row[i]) == str else row[i] for i in range(len(row)) ]
         out.append(row)
 
-    out.sort(key=lambda row: row[0])
+    total = sum([row[1] for row in out])
+
+    s_key = 0
+
+    if sort_by == 'category':
+        s_key = 2
+    elif sort_by == 'person':
+        s_key = 4
+    elif sort_by == 'amount':
+        s_key = 1
+
+    out.sort(key=lambda row: row[s_key])
 
     conn.commit()
     conn.close()
-    return out
+    return out, total
