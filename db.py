@@ -84,9 +84,6 @@ def display_data(category, person, from_date, to_date, sort_by):
         cur.execute("SELECT max(txn_date) FROM ledger")
         to_date = cur.fetchone()[0]
 
-
-
-
     basic_query = '''
             SELECT txn_date, amount, cat_name, description, person_name
             FROM ledger
