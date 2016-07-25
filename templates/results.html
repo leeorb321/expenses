@@ -1,0 +1,88 @@
+{% extends "layout.html" %}
+{% block title %}Display Data{% endblock %}
+
+
+{% block content %}
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <div class=page>
+  <h1>Display Data</h1>
+    <div class=new-expense>
+
+    <p id="filter-buttons">
+    Filter by: <br>
+    Category:
+    {% for row in data %}
+      <button>{{ row[2] }}</button>
+    {% endfor %}
+    <br>
+    Person:
+    {% for person in persons %}
+      <button>{{ person.capitalize() }}</button>
+    {% endfor %}
+    </p>
+
+      <table border="1"><tr>
+          <th id="date">Transaction Date</th>
+          <th id="amount">Amount</th>
+          <th id="category">Category</th>
+          <th>Description</th>
+          <th id="person">Person</th>
+          </tr>
+          <tbody id="results-table">
+              {% for row in data %}
+              <tr>
+                  <td>{{ row.date }}</td>
+                  <td>{{ "${:.2f}".format(row.amount) }}</td>
+                  <td>{{ row.category }}</td>
+                  <td>{{ row.description }}</td>
+                  <td>{{ row.person }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+        </table>
+        <p>Total: {{ "${:.2f}".format(total) }}</p>
+    </div>
+  </div>
+
+
+
+    <script type="text/javascript">
+
+    $(document).ready(function() {
+      $('table amount').click(function() {
+        $(this).hide();
+      });
+    });
+
+    document.getElementById("amount").onclick = function() {
+
+
+
+      var temp_content = "";
+          {% for row in  data|sort(attribute='amount')%}
+          temp_content += "<tr><td>"
+          temp_content += "{{ row.date }}"
+          temp_content += "</td>";
+          temp_content += "<td>$"
+          temp_content += {{ ('{:,.2f}'.format(row.amount)) }}
+          console.log({{'{:,.2f}'.format(row.amount)}});
+          temp_content += "</td>";
+          temp_content += "<td>"
+          temp_content += "{{ row.category }}"
+          temp_content += "</td>";
+          temp_content += "<td>"
+          temp_content += "{{ row.description }}"
+          temp_content += "</td>";
+          temp_content += "<td>"
+          temp_content += "{{ row.person }}"
+          temp_content += "</td></tr>";
+          {% endfor %}
+
+
+      document.getElementById("results-table").innerHTML = temp_content;
+
+    }
+
+
+    </script>
+{% endblock %}
