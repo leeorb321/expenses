@@ -129,3 +129,51 @@ def display_data(category, person, from_date, to_date, sort_by):
     conn.commit()
     conn.close()
     return out, total
+
+
+def display_all_data():
+    conn = psycopg2.connect(database="expenses", user="Leeor", password="password")
+    cur = conn.cursor()
+    out = []
+
+    cur.execute("SELECT min(txn_date) FROM ledger")
+    from_date = cur.fetchone()[0]
+
+    cur.execute("SELECT max(txn_date) FROM ledger")
+    to_date = cur.fetchone()[0]
+
+    query = '''
+            SELECT txn_date, amount, cat_name, description, person_name
+            FROM ledger
+            JOIN persons
+                ON ledger.person_id=persons.id
+            JOIN categories
+                ON ledger.category_id=categories.id
+            WHERE txn_date >= '%s' AND txn_date <= '%s'
+            ''' % (from_date, to_date)
+
+    cur.execute(query)
+    results = cur.fetchall()
+
+    for row in results:
+        row = list(row)
+        row[1] = float(row[1])/100
+        row = [ row[i].capitalize() if type(row[i]) == str else row[i] for i in range(len(row)) ]
+        out.append(row)
+
+    total = sum([row[1] for row in out])
+    out.sort(key=lambda row: row[0])
+
+    out_dicts = []
+    for row in out:
+        out_dicts.append({
+            'date': row[0],
+            'amount': row[1],
+            'category': row[2],
+            'description': row[3],
+            'person': row[4]
+            })
+
+    conn.commit()
+    conn.close()
+    return out_dicts, total
