@@ -48,41 +48,43 @@
 
     <script type="text/javascript">
 
-    $(document).ready(function() {
-      $('table amount').click(function() {
-        $(this).hide();
-      });
-    });
+    var flag = 0;
 
     document.getElementById("amount").onclick = function() {
 
+        {% set r = 0 %}
+        if (flag) {
+          flag = 0;
+          {% set r = 0 %}
+        } else {
+          flag = 1;
+          {% set r = 1 %}
+        }
+        console.log("{{r}}");
 
-
-      var temp_content = "";
-          {% for row in  data|sort(attribute='amount')%}
-          temp_content += "<tr><td>"
-          temp_content += "{{ row.date }}"
-          temp_content += "</td>";
-          temp_content += "<td>$"
-          temp_content += {{ ('{:,.2f}'.format(row.amount)) }}
-          console.log({{'{:,.2f}'.format(row.amount)}});
-          temp_content += "</td>";
-          temp_content += "<td>"
-          temp_content += "{{ row.category }}"
-          temp_content += "</td>";
-          temp_content += "<td>"
-          temp_content += "{{ row.description }}"
-          temp_content += "</td>";
-          temp_content += "<td>"
-          temp_content += "{{ row.person }}"
-          temp_content += "</td></tr>";
-          {% endfor %}
-
+        var temp_content = "";
+        {% for row in data|sort(attribute='amount', reverse=r) %}
+        temp_content += "<tr><td>"
+        temp_content += "{{ row.date }}"
+        temp_content += "</td>";
+        temp_content += "<td>$"
+        temp_content += {{ ('{:,.2f}'.format(row.amount)) }}
+        console.log({{'{:,.2f}'.format(row.amount)}});
+        temp_content += "</td>";
+        temp_content += "<td>"
+        temp_content += "{{ row.category }}"
+        temp_content += "</td>";
+        temp_content += "<td>"
+        temp_content += "{{ row.description }}"
+        temp_content += "</td>";
+        temp_content += "<td>"
+        temp_content += "{{ row.person }}"
+        temp_content += "</td></tr>";
+        {% endfor %}
 
       document.getElementById("results-table").innerHTML = temp_content;
 
     }
-
 
     </script>
 {% endblock %}

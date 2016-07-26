@@ -1,14 +1,38 @@
 from flask import Flask, render_template, request, redirect
-from db import connect, new_expense, display_data, display_all_data
+from os import system
+from datetime import datetime
+from db import *
 app = Flask(__name__)
+app.jinja_env.add_extension('jinja2.ext.do')
 
-persons, categories = connect()
+persons, categories = None, None
 
 @app.route('/')
 def index():
-    return render_template(
-        'index.html'
-    )
+    global persons
+    global categories
+    if (check_db_exists() == False):
+        return redirect('/initialize')
+    else:
+        persons, categories = connect()
+        return render_template('index.html')
+
+@app.route('/initialize', methods=['GET','POST'])
+def initialize():
+    global persons
+    global categories
+    if request.method == 'GET':
+        init_db()
+        return render_template('initialize.html')
+    elif request.method == 'POST':
+        print('HELLO')
+        users = request.form['persons']
+        cats = request.form['categories']
+
+        users = [ person.lower() for person in users.split(',') ]
+        cats = [ category.lower() for category in cats.split(',') ]
+        init_tables(users, cats)
+        return redirect('/')
 
 @app.route('/submit_expense', methods=['GET','POST'])
 def submit_page():
@@ -29,29 +53,6 @@ def submit_page():
 
         return redirect('/')
 
-# @app.route('/retrieve_data', methods=['GET', 'POST'])
-# def retrieve_data():
-#     if request.method == 'GET':
-#         return render_template(
-#             'retrieve_data.html',
-#             categories=categories,
-#             persons=persons
-#         )
-#     elif request.method == 'POST':
-#         from_date = request.form['from_date']
-#         to_date = request.form['to_date']
-#         category = request.form['category']
-#         person = request.form['person']
-#         sort_by = request.form['sort_by']
-
-#         data, total = display_data(category, person, from_date, to_date, sort_by)
-
-#         return render_template(
-#             'display_data.html',
-#             data=data,
-#             total=total)
-
-
 @app.route('/retrieve_data', methods=['GET'])
 def retrieve_data():
     if request.method == 'GET':
@@ -63,6 +64,13 @@ def retrieve_data():
             total=total,
             persons=persons
         )
+
+@app.route('/')
+def backup_db():
+    backup_name = str(datetime.now()).replace(':','-')
+    bu_command = 'pg_dump expenses > %s' % backup_name
+    system(bu_command)
+    redirect('/')
 
 if __name__ == '__main__':
     app.run(debug=True)

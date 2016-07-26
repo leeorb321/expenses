@@ -1,39 +1,70 @@
 import sys
+from os import system
 import psycopg2
+
+def check_db_exists():
+    try:
+        conn = psycopg2.connect(database="expenses")
+        return True
+    except:
+        return False
+
+def init_db():
+    p = system('psql -U postgres postgres -f create_db.sql')
+    conn = psycopg2.connect(database="expenses")
+    cur = conn.cursor()
+
+    cur.execute('''CREATE TABLE ledger
+                   (id SERIAL PRIMARY KEY,
+                   person_id   SERIAL NOT NULL,
+                   category_id SERIAL     NOT NULL,
+                   amount      NUMERIC(10) NOT NULL,
+                   txn_date    DATE        NOT NULL,
+                   description TEXT);
+                ''')
+
+    cur.execute('''CREATE TABLE persons
+                    (id SERIAL PRIMARY KEY,
+                    person_name TEXT NOT NULL UNIQUE);
+                ''')
+
+    cur.execute('''CREATE TABLE categories
+                    (id SERIAL PRIMARY KEY,
+                    cat_name TEXT NOT NULL UNIQUE);
+                ''')
+
+    conn.commit()
+    conn.close()
+
+
+def init_tables(persons, categories):
+    conn = psycopg2.connect(database="expenses")
+    cur = conn.cursor()
+    cur.execute("SELECT table_name FROM information_schema.tables WHERE table_schema='public' AND table_type='BASE TABLE';")
+
+    print(persons, categories)
+
+    for person in persons:
+        cur.execute('''INSERT INTO persons (person_name) VALUES (%s);''' % person)
+    if len(persons) > 1:
+        cur.execute('''INSERT INTO persons (person_name) VALUES ('together');''')
+
+    for category in categories:
+        cur.execute('''INSERT INTO categories (cat_name) VALUES (%s);''' % category)
+
+    conn.commit()
+    conn.close()
+    return persons, categories
 
 def connect():
     try:
-        conn = psycopg2.connect(database="expenses", user="Leeor", password="password")
+        conn = psycopg2.connect(database="expenses")
         cur = conn.cursor()
-        cur.execute("SELECT table_name FROM information_schema.tables WHERE table_schema='public' AND table_type='BASE TABLE'")
-        if cur.rowcount == 0:
-            cur.execute('''CREATE TABLE ledger
-                           (id SERIAL PRIMARY KEY,
-                           person_id   SERIAL NOT NULL,
-                           category_id SERIAL     NOT NULL,
-                           amount      NUMERIC(10) NOT NULL,
-                           txn_date    DATE        NOT NULL,
-                           description TEXT
-                        )''')
 
-            cur.execute('''CREATE TABLE persons
-                           (id SERIAL PRIMARY KEY,
-                           person_name TEXT NOT NULL UNIQUE
-                        )''')
-
-            cur.execute('''INSERT INTO persons (person_name) VALUES ('leeor'), ('marie'), ('together')''')
-
-            cur.execute('''CREATE TABLE categories
-                           (id SERIAL PRIMARY KEY,
-                           cat_name TEXT NOT NULL UNIQUE
-                        )''')
-
-            cur.execute('''INSERT INTO categories (cat_name) VALUES ('food'), ('transportation'), ('entertainment'), ('car'), ('housing'), ('clothing'), ('books'), ('medical'), ('restaurants'), ('misc'), ('donations'), ('children'), ('travel'), ('gifts'), ('electronics')''')
-
-        cur.execute('''SELECT person_name FROM persons''')
+        cur.execute('''SELECT person_name FROM persons;''')
         persons = [ person[0] for person in list(cur.fetchall()) ]
 
-        cur.execute('''SELECT cat_name FROM categories''')
+        cur.execute('''SELECT cat_name FROM categories;''')
         categories = [ category[0] for category in list(cur.fetchall()) ]
 
         conn.commit()
@@ -46,11 +77,11 @@ def connect():
 
 def new_expense(person, expense_date, amount, category, description):
     try:
-        conn = psycopg2.connect(database="expenses", user="Leeor", password="password")
+        conn = psycopg2.connect(database="expenses")
         cur = conn.cursor()
         cur.execute('''INSERT INTO ledger (person_id, txn_date, amount, category_id, description)
                         SELECT (SELECT id FROM persons WHERE person_name='%s'), '%s', %d,
-                        (SELECT id FROM categories WHERE cat_name='%s'), '%s' '''
+                        (SELECT id FROM categories WHERE cat_name='%s'), '%s' ;'''
                         % (person, expense_date, amount, category, description))
         conn.commit()
         conn.close()
@@ -61,7 +92,7 @@ def new_expense(person, expense_date, amount, category, description):
 
 def add_category(category_name):
     try:
-        conn = psycopg2.connect(database="expenses", user="Leeor", password="password")
+        conn = psycopg2.connect(database="expenses")
         cur = conn.cursor()
         cur.execute('''INSERT INTO category (cat_name) SELECT %s''' % category_name)
         conn.commit()
@@ -72,7 +103,7 @@ def add_category(category_name):
         sys.exit(1)
 
 def display_data(category, person, from_date, to_date, sort_by):
-    conn = psycopg2.connect(database="expenses", user="Leeor", password="password")
+    conn = psycopg2.connect(database="expenses")
     cur = conn.cursor()
     out = []
 
@@ -130,9 +161,8 @@ def display_data(category, person, from_date, to_date, sort_by):
     conn.close()
     return out, total
 
-
 def display_all_data():
-    conn = psycopg2.connect(database="expenses", user="Leeor", password="password")
+    conn = psycopg2.connect(database="expenses")
     cur = conn.cursor()
     out = []
 
