@@ -5,6 +5,7 @@ from db import *
 app = Flask(__name__)
 app.jinja_env.add_extension('jinja2.ext.do')
 
+persons, categories = None, None
 if (check_db_exists()):
     persons, categories = connect()
 
@@ -30,8 +31,8 @@ def initialize():
         users = request.form['persons']
         cats = request.form['categories']
 
-        users = [ person.lower() for person in users.split(',') ]
-        cats = [ category.lower() for category in cats.split(',') ]
+        users = [ person.lower().strip() for person in users.split(',') ]
+        cats = [ category.lower().strip() for category in cats.split(',') ]
         init_tables(users, cats)
         return redirect('/')
 
