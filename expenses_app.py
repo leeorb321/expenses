@@ -67,7 +67,7 @@ def add_category():
 def update_entry():
     new_person = request.form['person']
     new_date = request.form['expense_date']
-    new_amount = request.form['amount']
+    new_amount = int(float(request.form['amount'])*100)
     new_category = request.form['category']
     new_description = request.form['description']
     txn_id = request.form['txn_id']

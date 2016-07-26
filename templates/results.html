@@ -19,7 +19,7 @@
       <form hidden id='modified_entry' method='post' action='update_entry'>
       <p>
          Date:       <input type='date' name='expense_date' />
-         Amount:     <input type='text' name='amount' />
+         Amount: $   <input autocomplete='off' type='text' name='amount' />
          Person:     <select name='person'>
                      {% for person in persons %}
                          <option value='{{ person }}'>{{ person.capitalize() }}</option>
@@ -36,7 +36,6 @@
          <input type='submit' value='Submit'>
        </p>
        </form>
-
       <p align="center">Total: {{ "${:.2f}".format(total) }}</p>
     </div>
   </div>
@@ -52,7 +51,6 @@
     }
 
     function drawRow(rowData) {
-
         var row = $("<tr>")
         row.append("<td align='center'><input type='radio' name='toModify' value='" + rowData.id + "'/></td>");
         var fDate = new Date((rowData.date).substring(0,(rowData.date).length - 4)).toLocaleDateString("en-US");
@@ -62,19 +60,15 @@
         row.append($("<td>" + rowData.description + "</td>"));
         row.append($("<td>" + rowData.person + "</td></tr>"));
         $("#datatable tbody").append(row);
-
     }
 
     drawTable(expensesData);
 
     document.getElementById("amount").onclick = function() {
-
       var sortedByAmount = expensesData.sort(function(a,b) {
         return parseFloat(a.amount) - parseFloat(b.amount);
       });
-
       drawTable(sortedByAmount);
-
     }
 
     var radioValue = 0;
@@ -86,20 +80,16 @@
           $("#modified_entry").show();
         }
       });
+
+      $("#modified_entry").submit( function(eventObj) {
+        $('<input />').attr('type', 'hidden')
+            .attr('name', "txn_id")
+            .attr('value', radioValue)
+            .appendTo('#modified_entry');
+        return true;
+        });
     });
 
-
-    $("#modified_entry").submit( function(eventObj) {
-      $('<input />').attr('type', 'hidden')
-          .attr('name', "txn_id")
-          .attr('value', radioValue)
-          .appendTo('#modified_entry');
-      return true;
-      });
-
-
-
   </script>
-
 
 {% endblock %}
