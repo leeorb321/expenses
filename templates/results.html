@@ -4,87 +4,60 @@
 
 {% block content %}
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.14.1/moment.js"></script>
   <div class=page>
   <h1>Display Data</h1>
     <div class=new-expense>
 
-    <p id="filter-buttons">
-    Filter by: <br>
-    Category:
-    {% for row in data %}
-      <button>{{ row[2] }}</button>
-    {% endfor %}
-    <br>
-    Person:
-    {% for person in persons %}
-      <button>{{ person.capitalize() }}</button>
-    {% endfor %}
-    </p>
-
-      <table border="1"><tr>
+      <table border="1" id="datatable"><tr>
           <th id="date">Transaction Date</th>
           <th id="amount">Amount</th>
           <th id="category">Category</th>
           <th>Description</th>
           <th id="person">Person</th>
           </tr>
-          <tbody id="results-table">
-              {% for row in data %}
-              <tr>
-                  <td>{{ row.date }}</td>
-                  <td>{{ "${:.2f}".format(row.amount) }}</td>
-                  <td>{{ row.category }}</td>
-                  <td>{{ row.description }}</td>
-                  <td>{{ row.person }}</td>
-              </tr>
-              {% endfor %}
-            </tbody>
-        </table>
-        <p>Total: {{ "${:.2f}".format(total) }}</p>
+
+      </table>
+      <p>Total: {{ "${:.2f}".format(total) }}</p>
     </div>
   </div>
 
+  <script>
+    var expensesData = {{data|tojson}};
+    // console.log(allData);
 
-
-    <script type="text/javascript">
-
-    var flag = 0;
-
-    document.getElementById("amount").onclick = function() {
-
-        {% set r = 0 %}
-        if (flag) {
-          flag = 0;
-          {% set r = 0 %}
-        } else {
-          flag = 1;
-          {% set r = 1 %}
+    function drawTable(allData) {
+        for (var i = 0; i < allData.length; i++) {
+            drawRow(allData[i]);
         }
-        console.log("{{r}}");
+    }
 
-        var temp_content = "";
-        {% for row in data|sort(attribute='amount', reverse=r) %}
-        temp_content += "<tr><td>"
-        temp_content += "{{ row.date }}"
-        temp_content += "</td>";
-        temp_content += "<td>$"
-        temp_content += {{ ('{:,.2f}'.format(row.amount)) }}
-        console.log({{'{:,.2f}'.format(row.amount)}});
-        temp_content += "</td>";
-        temp_content += "<td>"
-        temp_content += "{{ row.category }}"
-        temp_content += "</td>";
-        temp_content += "<td>"
-        temp_content += "{{ row.description }}"
-        temp_content += "</td>";
-        temp_content += "<td>"
-        temp_content += "{{ row.person }}"
-        temp_content += "</td></tr>";
-        {% endfor %}
-
-      document.getElementById("results-table").innerHTML = temp_content;
+    function drawRow(rowData) {
+        var row = $("<tr>")
+        var fDate = new Date((rowData.date).substring(0,(rowData.date).length - 4)).toLocaleDateString("en-US");
+        row.append($("<td>" + fDate + "</td>"));
+        row.append($("<td>$" + rowData.amount + "</td>"));
+        row.append($("<td>" + rowData.category + "</td>"));
+        row.append($("<td>" + rowData.description + "</td>"));
+        row.append($("<td>" + rowData.person + "</td></tr>"));
+        $("#datatable tbody").append(row);
 
     }
 
-    </script>
+    drawTable(expensesData);
+
+    document.getElementById("amount").onclick = function() {
+
+      var sortedByAmount = expensesData.sort(function(a,b) {
+        return parseFloat(a.amount) - parseFloat(b.amount);
+      });
+
+      drawTable(sortedByAmount);
+
+    }
+
+
+  </script>
+
+
 {% endblock %}

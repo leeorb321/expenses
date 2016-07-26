@@ -5,7 +5,8 @@ from db import *
 app = Flask(__name__)
 app.jinja_env.add_extension('jinja2.ext.do')
 
-persons, categories = None, None
+if (check_db_exists()):
+    persons, categories = connect()
 
 @app.route('/')
 def index():
