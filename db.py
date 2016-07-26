@@ -102,19 +102,31 @@ def new_category(category_name):
         print('Error %s' % e)
         sys.exit(1)
 
+def update_expense(new_person, new_date, new_amount, new_category, new_description, txn_id):
+    try:
+        conn = psycopg2.connect(database="expenses")
+        cur = conn.cursor()
+        cur.execute('''UPDATE ledger SET
+                        person_id = (SELECT id FROM persons WHERE person_name = '%s'),
+                        txn_date = '%s',
+                        amount = '%s',
+                        category_id = (SELECT id FROM categories WHERE cat_name = '%s'),
+                        description = '%s'
+                        WHERE id = '%s';
+                    ''' % (new_person, new_date, new_amount, new_category, new_description, txn_id))
+        conn.commit()
+        conn.close()
+    except psycopg2.DatabaseError as e:
+        print('Error %s' % e)
+        sys.exit(1)
+
 def display_all_data():
     conn = psycopg2.connect(database="expenses")
     cur = conn.cursor()
     out = []
 
-    cur.execute("SELECT min(txn_date) FROM ledger")
-    from_date = cur.fetchone()[0]
-
-    cur.execute("SELECT max(txn_date) FROM ledger")
-    to_date = cur.fetchone()[0]
-
     query = '''
-            SELECT txn_date, amount, cat_name, description, person_name
+            SELECT txn_date, amount, cat_name, description, person_name, ledger.id
             FROM ledger
             JOIN persons
                 ON ledger.person_id=persons.id
@@ -141,7 +153,8 @@ def display_all_data():
             'amount': row[1],
             'category': row[2],
             'description': row[3],
-            'person': row[4]
+            'person': row[4],
+            'id': row[5]
             })
 
     conn.commit()

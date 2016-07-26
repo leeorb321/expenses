@@ -63,6 +63,20 @@ def add_category():
 
     return redirect('/')
 
+@app.route('/update_entry', methods=['POST'])
+def update_entry():
+    new_person = request.form['person']
+    new_date = request.form['expense_date']
+    new_amount = request.form['amount']
+    new_category = request.form['category']
+    new_description = request.form['description']
+    txn_id = request.form['txn_id']
+    print(new_person, new_date, new_amount, new_category, new_description, txn_id)
+
+    update_expense(new_person, new_date, new_amount, new_category, new_description, txn_id)
+
+    return redirect('/retrieve_data')
+
 @app.route('/retrieve_data', methods=['GET'])
 def retrieve_data():
     if request.method == 'GET':
@@ -72,7 +86,8 @@ def retrieve_data():
             'results.html',
             data=data,
             total=total,
-            persons=persons
+            persons=persons,
+            categories=categories
         )
 
 @app.route('/')
