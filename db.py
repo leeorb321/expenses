@@ -90,11 +90,11 @@ def new_expense(person, expense_date, amount, category, description):
         print('Error %s' % e)
         sys.exit(1)
 
-def add_category(category_name):
+def new_category(category_name):
     try:
         conn = psycopg2.connect(database="expenses")
         cur = conn.cursor()
-        cur.execute('''INSERT INTO category (cat_name) SELECT %s''' % category_name)
+        cur.execute('''INSERT INTO categories (cat_name) VALUES (%s)''', (category_name,))
         conn.commit()
         conn.close()
 

@@ -55,6 +55,14 @@ def submit_page():
 
         return redirect('/')
 
+@app.route('/add_category', methods=['POST'])
+def add_category():
+    category = request.form['category_name']
+
+    new_category(category)
+
+    return redirect('/')
+
 @app.route('/retrieve_data', methods=['GET'])
 def retrieve_data():
     if request.method == 'GET':
