@@ -12,7 +12,6 @@
           <th id="category">Category</th>
           <th>Description</th>
           <th id="person">Person</th>
-          <th>id</th>
           </tr>
       </table>
 
@@ -55,7 +54,7 @@
         row.append("<td align='center'><input type='radio' name='toModify' value='" + rowData.id + "'/></td>");
         var fDate = new Date((rowData.date).substring(0,(rowData.date).length - 4)).toLocaleDateString("en-US");
         row.append($("<td>" + fDate + "</td>"));
-        row.append($("<td>$" + rowData.amount + "</td>"));
+        row.append($("<td>$" + parseFloat(Math.round(rowData.amount * 100) / 100).toFixed(2) + "</td>"));
         row.append($("<td>" + rowData.category + "</td>"));
         row.append($("<td>" + rowData.description + "</td>"));
         row.append($("<td>" + rowData.person + "</td></tr>"));

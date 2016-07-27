@@ -140,7 +140,7 @@ def display_all_data():
     for row in results:
         row = list(row)
         row[1] = float(row[1])/100
-        row = [ row[i].capitalize() if type(row[i]) == str else row[i] for i in range(len(row)) ]
+        row = [ row[i].capitalize() if type(row[i]) == str and i != 3 else row[i] for i in range(len(row)) ]
         out.append(row)
 
     total = sum([row[1] for row in out])

@@ -3,7 +3,6 @@ from os import system
 from datetime import datetime
 from db import *
 app = Flask(__name__)
-app.jinja_env.add_extension('jinja2.ext.do')
 
 persons, categories = None, None
 if (check_db_exists()):
@@ -79,16 +78,24 @@ def update_entry():
 
 @app.route('/retrieve_data', methods=['GET'])
 def retrieve_data():
-    if request.method == 'GET':
-        data, total = display_all_data()
+    data, total = display_all_data()
 
-        return render_template(
-            'results.html',
-            data=data,
-            total=total,
-            persons=persons,
-            categories=categories
-        )
+    return render_template(
+        'results.html',
+        data=data,
+        total=total,
+        persons=persons,
+        categories=categories
+    )
+
+@app.route('/visualize')
+def visualize():
+    data, total = display_all_data()
+
+    return render_template(
+        'visualize.html',
+        data=data
+    )
 
 @app.route('/')
 def backup_db():
