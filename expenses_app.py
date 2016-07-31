@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect
 from os import system
 from datetime import datetime
 from db import *
+import os
 app = Flask(__name__)
 
 persons, categories = None, None
@@ -106,4 +107,5 @@ def backup_db():
     redirect('/')
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(debug=True, host='0.0.0.0', port=port)
