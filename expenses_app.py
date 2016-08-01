@@ -4,7 +4,6 @@ from datetime import datetime
 from db import *
 import os
 app = Flask(__name__)
-app.jinja_env.add_extension('jinja2.ext.do')
 
 persons, categories = None, None
 if (check_db_exists()):
@@ -64,17 +63,40 @@ def add_category():
 
     return redirect('/')
 
+@app.route('/update_entry', methods=['POST'])
+def update_entry():
+    new_person = request.form['person']
+    new_date = request.form['expense_date']
+    new_amount = int(float(request.form['amount'])*100)
+    new_category = request.form['category']
+    new_description = request.form['description']
+    txn_id = request.form['txn_id']
+    print(new_person, new_date, new_amount, new_category, new_description, txn_id)
+
+    update_expense(new_person, new_date, new_amount, new_category, new_description, txn_id)
+
+    return redirect('/retrieve_data')
+
 @app.route('/retrieve_data', methods=['GET'])
 def retrieve_data():
-    if request.method == 'GET':
-        data, total = display_all_data()
+    data, total = display_all_data()
 
-        return render_template(
-            'results.html',
-            data=data,
-            total=total,
-            persons=persons
-        )
+    return render_template(
+        'results.html',
+        data=data,
+        total=total,
+        persons=persons,
+        categories=categories
+    )
+
+@app.route('/visualize')
+def visualize():
+    data, total = display_all_data()
+
+    return render_template(
+        'visualize.html',
+        data=data
+    )
 
 @app.route('/')
 def backup_db():

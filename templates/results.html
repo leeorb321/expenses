@@ -1,30 +1,47 @@
 {% extends "layout.html" %}
 {% block title %}Display Data{% endblock %}
 
-
 {% block content %}
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.14.1/moment.js"></script>
   <div class=page>
   <h1>Display Data</h1>
     <div class=new-expense>
-
-      <table border="1" id="datatable"><tr>
+      <table border="1" id="datatable" align="center"><tr>
+          <th id="modify">Modify</th>
           <th id="date">Transaction Date</th>
           <th id="amount">Amount</th>
           <th id="category">Category</th>
           <th>Description</th>
           <th id="person">Person</th>
           </tr>
-
       </table>
-      <p>Total: {{ "${:.2f}".format(total) }}</p>
+
+      <form hidden id='modified_entry' method='post' action='update_entry'>
+      <p>
+         Date:       <input type='date' name='expense_date' />
+         Amount: $   <input autocomplete='off' type='text' name='amount' />
+         Person:     <select name='person'>
+                     {% for person in persons %}
+                         <option value='{{ person }}'>{{ person.capitalize() }}</option>
+                     {% endfor %}
+                     </select>
+          </p><p>
+          Category:   <select name='category'>
+                      {% for category in categories %}
+                          <option value='{{ category }}'>{{ category.capitalize() }}</option>
+                      {% endfor %}
+                          <option value='add_category'>Add Category</option>
+                      </select>
+         Description: <input type='text' name='description' />
+         <input type='submit' value='Submit'>
+       </p>
+       </form>
+      <p align="center">Total: {{ "${:.2f}".format(total) }}</p>
     </div>
   </div>
 
-  <script>
+  <script type="text/javascript">
+
     var expensesData = {{data|tojson}};
-    // console.log(allData);
 
     function drawTable(allData) {
         for (var i = 0; i < allData.length; i++) {
@@ -34,30 +51,44 @@
 
     function drawRow(rowData) {
         var row = $("<tr>")
+        row.append("<td align='center'><input type='radio' name='toModify' value='" + rowData.id + "'/></td>");
         var fDate = new Date((rowData.date).substring(0,(rowData.date).length - 4)).toLocaleDateString("en-US");
         row.append($("<td>" + fDate + "</td>"));
-        row.append($("<td>$" + rowData.amount + "</td>"));
+        row.append($("<td>$" + parseFloat(Math.round(rowData.amount * 100) / 100).toFixed(2) + "</td>"));
         row.append($("<td>" + rowData.category + "</td>"));
         row.append($("<td>" + rowData.description + "</td>"));
         row.append($("<td>" + rowData.person + "</td></tr>"));
         $("#datatable tbody").append(row);
-
     }
 
     drawTable(expensesData);
 
     document.getElementById("amount").onclick = function() {
-
       var sortedByAmount = expensesData.sort(function(a,b) {
         return parseFloat(a.amount) - parseFloat(b.amount);
       });
-
       drawTable(sortedByAmount);
-
     }
 
+    var radioValue = 0;
+
+    $(document).ready(function(){
+      $("input[type='radio']").click(function(){
+        radioValue = $("input[name='toModify']:checked").val();
+        if(radioValue){
+          $("#modified_entry").show();
+        }
+      });
+
+      $("#modified_entry").submit( function(eventObj) {
+        $('<input />').attr('type', 'hidden')
+            .attr('name', "txn_id")
+            .attr('value', radioValue)
+            .appendTo('#modified_entry');
+        return true;
+        });
+    });
 
   </script>
-
 
 {% endblock %}
