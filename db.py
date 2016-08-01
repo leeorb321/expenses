@@ -1,13 +1,13 @@
 import sys
 from os import system
 import psycopg2
-import urlparse
+import urllib.parse
 import os
 
 def check_heroku_db():
-    if 'CLEARDB_DATABASE_URL' in os.environ and os.environ['CLEARDB_DATABASE_URL']:
-        urlparse.uses_netloc.append("postgres")
-        url = urlparse.urlparse(os.environ["DATABASE_URL"])
+    if 'DATABASE_URL' in os.environ and os.environ['DATABASE_URL']:
+        urllib.parse.uses_netloc.append("postgres")
+        url = urllib.parse.urlparse(os.environ["DATABASE_URL"])
 
         conn = psycopg2.connect(
             database=url.path[1:],
