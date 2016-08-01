@@ -1,17 +1,26 @@
 import sys
 from os import system
 import psycopg2
+import os
+
+def check_heroku_db():
+    if 'CLEARDB_DATABASE_URL' in os.environ and os.environ['CLEARDB_DATABASE_URL']:
+        conn = psycopg2.connect(database=os.environ['CLEARDB_DATABASE_URL'])
+    else:
+        conn = psycopg2.connect(database="expenses")
+
+    return conn
 
 def check_db_exists():
     try:
-        conn = psycopg2.connect(database="expenses")
+        check_heroku_db()
         return True
     except:
         return False
 
 def init_db():
     p = system('psql -U postgres postgres -f create_db.sql')
-    conn = psycopg2.connect(database="expenses")
+    conn = check_heroku_db()
     cur = conn.cursor()
 
     cur.execute('''CREATE TABLE ledger
@@ -38,7 +47,7 @@ def init_db():
 
 
 def init_tables(persons, categories):
-    conn = psycopg2.connect(database="expenses")
+    conn = check_heroku_db()
     cur = conn.cursor()
     cur.execute("SELECT table_name FROM information_schema.tables WHERE table_schema='public' AND table_type='BASE TABLE';")
 
@@ -58,7 +67,7 @@ def init_tables(persons, categories):
 
 def connect():
     try:
-        conn = psycopg2.connect(database="expenses")
+        conn = check_heroku_db()
         cur = conn.cursor()
 
         cur.execute('''SELECT person_name FROM persons;''')
@@ -77,7 +86,7 @@ def connect():
 
 def new_expense(person, expense_date, amount, category, description):
     try:
-        conn = psycopg2.connect(database="expenses")
+        conn = check_heroku_db()
         cur = conn.cursor()
         cur.execute('''INSERT INTO ledger (person_id, txn_date, amount, category_id, description)
                         SELECT (SELECT id FROM persons WHERE person_name='%s'), '%s', %d,
@@ -92,7 +101,7 @@ def new_expense(person, expense_date, amount, category, description):
 
 def new_category(category_name):
     try:
-        conn = psycopg2.connect(database="expenses")
+        conn = check_heroku_db()
         cur = conn.cursor()
         cur.execute('''INSERT INTO categories (cat_name) VALUES (%s)''', (category_name,))
         conn.commit()
@@ -103,7 +112,7 @@ def new_category(category_name):
         sys.exit(1)
 
 def display_all_data():
-    conn = psycopg2.connect(database="expenses")
+    conn = check_heroku_db()
     cur = conn.cursor()
     out = []
 
