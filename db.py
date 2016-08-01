@@ -6,17 +6,18 @@ import os
 def check_heroku_db():
     if 'CLEARDB_DATABASE_URL' in os.environ and os.environ['CLEARDB_DATABASE_URL']:
         conn = psycopg2.connect(database=os.environ['CLEARDB_DATABASE_URL'])
+        return conn
     else:
         conn = psycopg2.connect(database="expenses")
+        return conn
 
-    return conn
+    return False
 
 def check_db_exists():
-    try:
-        check_heroku_db()
-        return True
-    except:
+    if check_heroku_db == False:
         return False
+    else:
+        return True
 
 def init_db():
     p = system('psql -U postgres postgres -f create_db.sql')
