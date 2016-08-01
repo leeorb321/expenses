@@ -94,7 +94,8 @@ def visualize():
 
     return render_template(
         'visualize.html',
-        data=data
+        data=data,
+        categories=categories
     )
 
 @app.route('/')
