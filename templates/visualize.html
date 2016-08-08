@@ -55,11 +55,10 @@
       var aggregatedData = {{data|tojson}};
       var categoriesChosen = {{categoriesSelected|tojson}};
       var personsChosen = {{personsSelected|tojson}};
-      console.log(categoriesChosen);
       for (var i = 0; i < aggregatedData.length; i++) {
         aggregatedData[i].date = new Date(aggregatedData[i].date);
       }
-  
+
       drawCharts(aggregatedData, "{{chartType}}", "{{dateFrom}}", "{{dateTo}}", categoriesChosen, personsChosen, "{{display}}");
 
     </script>
