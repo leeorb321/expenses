@@ -1,33 +1,40 @@
-function drawCharts(aggregatedData, allCategories, chartType, dateFrom, dateTo) {
+function drawCharts(aggregatedData, chartType, dateFrom, dateTo, categoriesSelected) {
 
     var amountsByCategory = {};
-    for (var i=0; i < allCategories.length; i++) {
-      amountsByCategory[allCategories[i]] = 0;
+    for (var i=0; i < categoriesSelected.length; i++) {
+      amountsByCategory[categoriesSelected[i]] = 0;
     }
 
-    if (dateFrom === "None" && dateTo === "None") {
-        for (var i=0; i < aggregatedData.length; i++) {
+    if (dateFrom === "None") {
+        dateFrom = aggregatedData[0].date;
+    }
+    else {
+        dateFrom = new Date(dateFrom);
+    }
+
+    if (dateTo === "None") {
+        dateTo = aggregatedData[aggregatedData.length - 1].date;
+    }
+    else {
+        dateTo = new Date(dateTo);
+    }
+
+    for (var i=0; i < aggregatedData.length; i++) {
+        if (aggregatedData[i].date >= dateFrom && aggregatedData[i].date <= dateTo) {
             amountsByCategory[aggregatedData[i].category.toLowerCase()] += aggregatedData[i].amount;
         }
     }
-    else {
-        for (var i=0; i < aggregatedData.length; i++) {
-            if (aggregatedData[i].date >= dateFrom && aggregatedData[i].date <= dateTo) {
-                amountsByCategory[aggregatedData[i].category.toLowerCase()] += aggregatedData[i].amount;
-            }
-        }
-    }
 
-    for (var i=0; i < allCategories.length; i++) {
-      amountsByCategory[allCategories[i]] = parseFloat(Math.round(amountsByCategory[allCategories[i]] * 100) / 100).toFixed(2);
+    for (var i=0; i < categoriesSelected.length; i++) {
+      amountsByCategory[categoriesSelected[i]] = parseFloat(Math.round(amountsByCategory[categoriesSelected[i]] * 100) / 100).toFixed(2);
     }
 
     if (chartType == "pie"){
         var chartData = [];
-        for (var i=0; i < allCategories.length; i++) {
+        for (var i=0; i < categoriesSelected.length; i++) {
           chartData.push({
-            value: amountsByCategory[allCategories[i]],
-            label: allCategories[i],
+            value: amountsByCategory[categoriesSelected[i]],
+            label: categoriesSelected[i],
             color: '#'+Math.floor(Math.random()*16777215).toString(16)
           });
         }
@@ -35,13 +42,13 @@ function drawCharts(aggregatedData, allCategories, chartType, dateFrom, dateTo) 
         var dataChart = new Chart(canvas).Pie(chartData);
 
     } else if (chartType == "line") {
-        var lineLabels = Object.keys(allCategories).map(function(k) {
-            return allCategories[k].charAt(0).toUpperCase() + allCategories[k].slice(1);
+        var lineLabels = Object.keys(categoriesSelected).map(function(k) {
+            return categoriesSelected[k].charAt(0).toUpperCase() + categoriesSelected[k].slice(1);
         });
 
         var amountsData = [];
-        for (var i=0; i < allCategories.length; i++) {
-          amountsData.push(amountsByCategory[allCategories[i]]);
+        for (var i=0; i < categoriesSelected.length; i++) {
+          amountsData.push(amountsByCategory[categoriesSelected[i]]);
         }
 
         var chartData = {

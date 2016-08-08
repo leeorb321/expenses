@@ -97,6 +97,8 @@ def visualize():
         chart_type = 'pie'
         date_from = "None"
         date_to = "None"
+        selected_categories = categories
+        selected_persons = persons
     elif request.method == 'POST':
         chart_type = request.form['chart_type']
 
@@ -110,13 +112,24 @@ def visualize():
         else:
             date_to = request.form['date_to']
 
+        selected_categories = request.form.getlist('categories_chosen')
+        if (selected_categories == [] or selected_categories[0] == 'all'):
+            selected_categories = categories
+
+        selected_persons = request.form.getlist('persons_chosen')
+        if (selected_persons == [] or selected_persons[0] == 'all'):
+            selected_persons = categories
+
     return render_template(
         'visualize.html',
         data=data,
         categories=categories,
+        persons=persons,
         chartType=chart_type,
         dateFrom = date_from,
-        dateTo = date_to
+        dateTo = date_to,
+        categoriesSelected=selected_categories,
+        personsSelected=selected_persons
     )
 
 @app.route('/')
