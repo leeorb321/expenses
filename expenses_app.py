@@ -89,14 +89,20 @@ def retrieve_data():
         categories=categories
     )
 
-@app.route('/visualize')
+@app.route('/visualize', methods=['GET','POST'])
 def visualize():
     data, total = display_all_data()
+
+    if request.method == 'GET':
+        chart_type = 'pie'
+    elif request.method == 'POST':
+        chart_type = request.form['choice']
 
     return render_template(
         'visualize.html',
         data=data,
-        categories=categories
+        categories=categories,
+        chartType=chart_type
     )
 
 @app.route('/')

@@ -30,7 +30,7 @@ def check_db_exists():
         return True
 
 def init_db():
-    p = system('psql -U postgres postgres -f create_db.sql')
+    p = system('psql -U postgres postgres -f create_db.sql') # ADD TO README INSTEAD
     conn = check_heroku_db()
     cur = conn.cursor()
 

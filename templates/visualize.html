@@ -2,53 +2,34 @@
 {% block title %}Visualize Data{% endblock %}
 {% block content %}
 
-  <script src="http://cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
-  <link href="http://cdn.jsdelivr.net/chartist.js/latest/chartist.min.css" rel="stylesheet" type="text/css" />
   <link href='http://fonts.googleapis.com/css?family=Oxygen:300' rel='stylesheet' type='text/css'>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.js"></script>
-
+  <script type="text/javascript" src="{{ url_for('static', filename='expenses_charts.js') }}"></script>
 
   <div class="page">
   <h1>Visualize Data</h1>
 
-    <div class="aggregated-chart"></div>
+    <div id="chart-options">
+      <form method="post" action="visualize">
+        <input type="text" name="choice">
+        <input type="submit" name="Submit">
+      </form>
+    </div>
+
     <canvas id="all-data" width="600" height="400"></canvas>
-    <script>
 
-    var aggregatedData = {{data|tojson}};
-    var allCategories = {{categories|tojson}};
-    var amountsByCategory = {};
-    for (var i=0; i < allCategories.length; i++) {
-      amountsByCategory[allCategories[i]] = 0;
-    }
+    <script type="text/javascript">
+      var canvas = document.getElementById("all-data").getContext("2d");
 
-    for (var i=0; i < aggregatedData.length; i++) {
-      amountsByCategory[aggregatedData[i].category.toLowerCase()] += aggregatedData[i].amount;
-    }
+      var aggregatedData = {{data|tojson}};
+      var allCategories = {{categories|tojson}};
+      var type = "{{chartType}}";
 
-    for (var i=0; i < allCategories.length; i++) {
-      amountsByCategory[allCategories[i]] = parseFloat(Math.round(amountsByCategory[allCategories[i]] * 100) / 100).toFixed(2);
-    }
-
-    var chartData = [];
-    for (var i=0; i < allCategories.length; i++) {
-      console.log(amountsByCategory[allCategories[i]]);
-      chartData.push({
-        value: amountsByCategory[allCategories[i]],
-        label: allCategories[i],
-        color: '#'+Math.floor(Math.random()*16777215).toString(16)
-      });
-    }
-
-
-
-    var context = document.getElementById('all-data').getContext('2d');
-    var dataChart = new Chart(context).Pie(chartData);
-
+      drawCharts(aggregatedData, allCategories, type);
 
     </script>
-  </div>
 
+  </div>
 
 
 {% endblock %}
