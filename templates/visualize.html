@@ -19,6 +19,7 @@
         Date Range:
         <input type="date" name="date_from">
         <input type="date" name="date_to">
+        <br>
         Categories:
         <select name="categories_chosen" multiple>
           <option value="all">Select All</option>
@@ -26,7 +27,6 @@
             <option value="{{ category }}">{{ category.capitalize() }}</option>
           {% endfor %}
         </select>
-        <br>
         Persons:
         <select name="persons_chosen" multiple>
           <option value="all">Select All</option>
@@ -45,6 +45,7 @@
 
       var aggregatedData = {{data|tojson}};
       var categoriesChosen = {{categoriesSelected|tojson}};
+      var personsChosen = {{personsSelected|tojson}};
       console.log(categoriesChosen);
       for (var i = 0; i < aggregatedData.length; i++) {
         aggregatedData[i].date = new Date(aggregatedData[i].date);
@@ -53,7 +54,7 @@
       var dateTo = "{{dateTo}}";
       var dateFrom = "{{dateFrom}}";
 
-      drawCharts(aggregatedData, type, "{{dateFrom}}", "{{dateTo}}", categoriesChosen);
+      drawCharts(aggregatedData, type, "{{dateFrom}}", "{{dateTo}}", categoriesChosen, personsChosen);
 
     </script>
 

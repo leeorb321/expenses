@@ -1,4 +1,6 @@
-function drawCharts(aggregatedData, chartType, dateFrom, dateTo, categoriesSelected) {
+function drawCharts(aggregatedData, chartType, dateFrom, dateTo, categoriesSelected, personsSelected) {
+
+    console.log(personsSelected[0]);
 
     var amountsByCategory = {};
     for (var i=0; i < categoriesSelected.length; i++) {
@@ -20,8 +22,15 @@ function drawCharts(aggregatedData, chartType, dateFrom, dateTo, categoriesSelec
     }
 
     for (var i=0; i < aggregatedData.length; i++) {
-        if (aggregatedData[i].date >= dateFrom && aggregatedData[i].date <= dateTo) {
-            amountsByCategory[aggregatedData[i].category.toLowerCase()] += aggregatedData[i].amount;
+        if (personsSelected[0] == "all") {
+            if (aggregatedData[i].date >= dateFrom && aggregatedData[i].date <= dateTo) {
+                amountsByCategory[aggregatedData[i].category.toLowerCase()] += aggregatedData[i].amount;
+            }
+        }
+        else {
+            if (aggregatedData[i].date >= dateFrom && aggregatedData[i].date <= dateTo && personsSelected.indexOf(aggregatedData[i].person.toLowerCase()) > -1) {
+                amountsByCategory[aggregatedData[i].category.toLowerCase()] += aggregatedData[i].amount;
+            }
         }
     }
 

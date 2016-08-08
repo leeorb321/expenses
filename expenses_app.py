@@ -98,7 +98,7 @@ def visualize():
         date_from = "None"
         date_to = "None"
         selected_categories = categories
-        selected_persons = persons
+        selected_persons = ['all']
     elif request.method == 'POST':
         chart_type = request.form['chart_type']
 
@@ -118,7 +118,7 @@ def visualize():
 
         selected_persons = request.form.getlist('persons_chosen')
         if (selected_persons == [] or selected_persons[0] == 'all'):
-            selected_persons = categories
+            selected_persons = ['all']
 
     return render_template(
         'visualize.html',
