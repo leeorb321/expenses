@@ -95,14 +95,28 @@ def visualize():
 
     if request.method == 'GET':
         chart_type = 'pie'
+        date_from = "None"
+        date_to = "None"
     elif request.method == 'POST':
         chart_type = request.form['chart_type']
+
+        if (request.form['date_from'] == ""):
+            date_from = "None"
+        else:
+            date_from = date_from = request.form['date_from']
+
+        if (request.form['date_to'] == ""):
+            date_to = "None"
+        else:
+            date_to = request.form['date_to']
 
     return render_template(
         'visualize.html',
         data=data,
         categories=categories,
-        chartType=chart_type
+        chartType=chart_type,
+        dateFrom = date_from,
+        dateTo = date_to
     )
 
 @app.route('/')

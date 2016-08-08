@@ -11,10 +11,14 @@
 
     <div id="chart-options">
       <form method="post" action="visualize">
+      Chart Type:
         <select name="chart_type">
           <option value="pie">Pie</option>
           <option value="line">Line</option>
         </select>
+        Date Range:
+        <input type="date" name="date_from">
+        <input type="date" name="date_to">
         <input type="submit" name="submit">
       </form>
     </div>
@@ -27,8 +31,12 @@
       var aggregatedData = {{data|tojson}};
       var allCategories = {{categories|tojson}};
       var type = "{{chartType}}";
+      console.log("{{dateTo}}")
+      console.log("{{dateFrom}}")
+      var dateTo = "{{dateTo}}"
+      var dateFrom = "{{dateFrom}}"
 
-      drawCharts(aggregatedData, allCategories, type);
+      drawCharts(aggregatedData, allCategories, type, "{{dateFrom}}", "{{dateTo}}");
 
     </script>
 

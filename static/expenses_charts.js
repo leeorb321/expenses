@@ -1,12 +1,21 @@
-function drawCharts(aggregatedData, allCategories, chartType) {
+function drawCharts(aggregatedData, allCategories, chartType, dateFrom, dateTo) {
 
     var amountsByCategory = {};
     for (var i=0; i < allCategories.length; i++) {
       amountsByCategory[allCategories[i]] = 0;
     }
 
-    for (var i=0; i < aggregatedData.length; i++) {
-      amountsByCategory[aggregatedData[i].category.toLowerCase()] += aggregatedData[i].amount;
+    if (dateFrom === "None" && dateTo === "None") {
+        for (var i=0; i < aggregatedData.length; i++) {
+            amountsByCategory[aggregatedData[i].category.toLowerCase()] += aggregatedData[i].amount;
+        }
+    }
+    else {
+        for (var i=0; i < aggregatedData.length; i++) {
+            if (aggregatedData[i].date >= dateFrom && aggregatedData[i].date <= dateTo) {
+                amountsByCategory[aggregatedData[i].category.toLowerCase()] += aggregatedData[i].amount;
+            }
+        }
     }
 
     for (var i=0; i < allCategories.length; i++) {
