@@ -96,7 +96,7 @@ def visualize():
     if request.method == 'GET':
         chart_type = 'pie'
     elif request.method == 'POST':
-        chart_type = request.form['choice']
+        chart_type = request.form['chart_type']
 
     return render_template(
         'visualize.html',

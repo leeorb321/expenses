@@ -11,8 +11,11 @@
 
     <div id="chart-options">
       <form method="post" action="visualize">
-        <input type="text" name="choice">
-        <input type="submit" name="Submit">
+        <select name="chart_type">
+          <option value="pie">Pie</option>
+          <option value="line">Line</option>
+        </select>
+        <input type="submit" name="submit">
       </form>
     </div>
 
