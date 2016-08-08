@@ -34,6 +34,15 @@
             <option value="{{ person }}">{{ person.capitalize() }}</option>
           {% endfor %}
         </select>
+        Display By:
+        <select name="display">
+          <option value="category">Category</option>
+          <option value="person">Person</option>
+          <option value="year">Year</option>
+          <option value="month">Month</option>
+          <option value="week">Week</option>
+          <option value="day">Day</option>
+        </select>
         <input type="submit" name="submit">
       </form>
     </div>
@@ -50,11 +59,8 @@
       for (var i = 0; i < aggregatedData.length; i++) {
         aggregatedData[i].date = new Date(aggregatedData[i].date);
       }
-      var type = "{{chartType}}";
-      var dateTo = "{{dateTo}}";
-      var dateFrom = "{{dateFrom}}";
-
-      drawCharts(aggregatedData, type, "{{dateFrom}}", "{{dateTo}}", categoriesChosen, personsChosen);
+  
+      drawCharts(aggregatedData, "{{chartType}}", "{{dateFrom}}", "{{dateTo}}", categoriesChosen, personsChosen, "{{display}}");
 
     </script>
 

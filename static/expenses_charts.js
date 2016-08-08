@@ -1,7 +1,5 @@
 function drawCharts(aggregatedData, chartType, dateFrom, dateTo, categoriesSelected, personsSelected) {
 
-    console.log(personsSelected[0]);
-
     var amountsByCategory = {};
     for (var i=0; i < categoriesSelected.length; i++) {
       amountsByCategory[categoriesSelected[i]] = 0;

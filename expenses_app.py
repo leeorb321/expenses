@@ -95,20 +95,23 @@ def visualize():
 
     if request.method == 'GET':
         chart_type = 'pie'
-        date_from = "None"
-        date_to = "None"
+        date_from = 'None'
+        date_to = 'None'
         selected_categories = categories
         selected_persons = ['all']
+        display = 'category'
+
     elif request.method == 'POST':
         chart_type = request.form['chart_type']
+        display = request.form['display']
 
-        if (request.form['date_from'] == ""):
-            date_from = "None"
+        if (request.form['date_from'] == ''):
+            date_from = 'None'
         else:
             date_from = date_from = request.form['date_from']
 
-        if (request.form['date_to'] == ""):
-            date_to = "None"
+        if (request.form['date_to'] == ''):
+            date_to = 'None'
         else:
             date_to = request.form['date_to']
 
@@ -129,7 +132,8 @@ def visualize():
         dateFrom = date_from,
         dateTo = date_to,
         categoriesSelected=selected_categories,
-        personsSelected=selected_persons
+        personsSelected=selected_persons,
+        display=display
     )
 
 @app.route('/')
@@ -141,6 +145,6 @@ def backup_db():
 
 if __name__ == '__main__':
     if 'HEROKU_CHECK' in os.environ:
-        app.run(debug=True, host='0.0.0.0', port=int(os.environ.get("PORT")))
+        app.run(debug=True, host='0.0.0.0', port=int(os.environ.get('PORT')))
     else:
         app.run(debug=True)
