@@ -27,14 +27,12 @@ function drawCharts(aggregatedData, chartType, dateFrom, dateTo, categoriesSelec
     }
 
     for (var i = 0; i < aggregatedData.length; i++) {
-        if (aggregatedData[i].date >= dateFrom && aggregatedData[i].date <= dateTo && personsSelected.indexOf(aggregatedData[i].person.toLowerCase()) > -1) {
+        if (aggregatedData[i].date >= dateFrom && aggregatedData[i].date <= dateTo && personsSelected.indexOf(aggregatedData[i].person.toLowerCase()) > -1 && categoriesSelected.indexOf(aggregatedData[i].category.toLowerCase()) > -1) {
             if (display == "category") {
                 amounts[aggregatedData[i].category.toLowerCase()] += aggregatedData[i].amount;
             }
             else if (display == "person") {
-                if (categoriesSelected.indexOf(aggregatedData[i].category.toLowerCase() > -1)) {
-                    amounts[aggregatedData[i].person.toLowerCase()] += aggregatedData[i].amount;
-                }
+                amounts[aggregatedData[i].person.toLowerCase()] += aggregatedData[i].amount;
             }
         }
     }
@@ -42,10 +40,13 @@ function drawCharts(aggregatedData, chartType, dateFrom, dateTo, categoriesSelec
     for (var i = 0; i < displayBins.length; i++) {
       amounts[displayBins[i]] = parseFloat(Math.round(amounts[displayBins[i]] * 100) / 100).toFixed(2);
     }
-
-    console.log(display);
+    console.log("categoriesSelected: ");
     console.log(categoriesSelected);
+    console.log("personsSelected: ");
+    console.log(personsSelected);
+    console.log("displayBins: ");
     console.log(displayBins);
+    console.log("amounts: ");
     console.log(amounts);
 
     if (chartType == "pie"){
