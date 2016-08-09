@@ -14,12 +14,28 @@ function drawCharts(aggregatedData, chartType, dateFrom, dateTo, categoriesSelec
         dateTo = new Date(dateTo);
     }
 
+    var dateFromWrapper = moment(dateFrom);
+    var dateToWrapper = moment(dateTo);
+
+    var displayBins = [];
+
     if (display == "category") {
-        var displayBins = categoriesSelected;
+        displayBins = categoriesSelected;
     }
     else if (display == "person") {
-        var displayBins = personsSelected;
+        displayBins = personsSelected;
     }
+    // else if (display == "year") {
+    //     var tempDateFrom = moment(dateFrom);
+
+    //     fromString = tempDateFrom.format('YYYY');
+    //     toString = dateToWrapper.format('YYYY');
+
+    //     while (moment(fromString).isSameOrBefore(moment(toString))) {
+    //         displayBins.push(tempDateFrom.format('YYYY'));
+    //         tempDateFrom.add(1, 'y');
+    //     }
+    // }
 
     var amounts = {};
     for (var i = 0; i < displayBins.length; i++) {
@@ -40,6 +56,11 @@ function drawCharts(aggregatedData, chartType, dateFrom, dateTo, categoriesSelec
             else if (display == "person") {
                 amounts[aggregatedData[i].person.toLowerCase()] += aggregatedData[i].amount;
             }
+            // else if (display == "year") {
+            //     var tempDate = new Date(aggregatedData[i].date)
+            //     var dateWrapper = moment(tempDate);
+            //     amounts[dateWrapper.format('YYYY')] += aggregatedData[i].amount;
+            // }   
         }
     }
 
