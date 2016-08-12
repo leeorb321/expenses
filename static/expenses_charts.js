@@ -25,17 +25,50 @@ function drawCharts(aggregatedData, chartType, dateFrom, dateTo, categoriesSelec
     else if (display == "person") {
         displayBins = personsSelected;
     }
-    // else if (display == "year") {
-    //     var tempDateFrom = moment(dateFrom);
+    else if (display == "year") {
+        var incrementedDate = moment(dateFrom);
 
-    //     fromString = tempDateFrom.format('YYYY');
-    //     toString = dateToWrapper.format('YYYY');
+        var fromString = incrementedDate.format('YYYY');
+        var toString = dateToWrapper.format('YYYY');
 
-    //     while (moment(fromString).isSameOrBefore(moment(toString))) {
-    //         displayBins.push(tempDateFrom.format('YYYY'));
-    //         tempDateFrom.add(1, 'y');
-    //     }
-    // }
+        while (moment(fromString).isSameOrBefore(moment(toString))) {
+            displayBins.push(incrementedDate.format('YYYY'));
+            incrementedDate.add(1, 'y');
+            fromString = incrementedDate.format('YYYY');
+        }
+
+    }
+    else if (display == "month") {
+        var incrementedDate = moment(dateFrom).startOf('month');
+
+        while (incrementedDate.isSameOrBefore(dateToWrapper)) {
+            displayBins.push(incrementedDate.format('MMM YYYY'));
+            incrementedDate.add(1, 'M');
+        }
+
+        console.log(displayBins);
+    }
+    else if (display == "week") {
+        var incrementedDate = moment(dateFrom).startOf('week');
+
+        while (incrementedDate.isSameOrBefore(dateToWrapper)) {
+            displayBins.push("Week of " + incrementedDate.format('MMM Do, YYYY'));
+            incrementedDate.add(1, 'w');
+        }
+
+        console.log(displayBins);
+    }
+    else if (display == "day") {
+        var incrementedDate = moment(dateFrom);
+
+        while (incrementedDate.isSameOrBefore(dateToWrapper)) {
+            displayBins.push(incrementedDate.format('MMM Do, YYYY'));
+            incrementedDate.add(1, 'd');
+        }
+
+        console.log(displayBins);
+    }
+
 
     var amounts = {};
     for (var i = 0; i < displayBins.length; i++) {
@@ -56,11 +89,27 @@ function drawCharts(aggregatedData, chartType, dateFrom, dateTo, categoriesSelec
             else if (display == "person") {
                 amounts[aggregatedData[i].person.toLowerCase()] += aggregatedData[i].amount;
             }
-            // else if (display == "year") {
-            //     var tempDate = new Date(aggregatedData[i].date)
-            //     var dateWrapper = moment(tempDate);
-            //     amounts[dateWrapper.format('YYYY')] += aggregatedData[i].amount;
-            // }   
+            else if (display == "year") {
+                var tempDate = new Date(aggregatedData[i].date);
+                var dateWrapper = moment(tempDate);
+                amounts[dateWrapper.format('YYYY')] += aggregatedData[i].amount;
+            }
+            else if (display == "month") {
+                var tempDate = new Date(aggregatedData[i].date);
+                var dateWrapper = moment(tempDate).startOf('month');
+                amounts[dateWrapper.format('MMM YYYY')] += aggregatedData[i].amount;
+            }      
+            else if (display == "week") {
+                var tempDate = new Date(aggregatedData[i].date);
+                var dateWrapper = moment(tempDate).startOf('week');
+                amounts["Week of " + dateWrapper.format('MMM Do, YYYY')] += aggregatedData[i].amount;
+            }  
+            else if (display == "day") {
+                var tempDate = new Date(aggregatedData[i].date);
+                var dateWrapper = moment(tempDate);
+                amounts[dateWrapper.format('MMM Do, YYYY')] += aggregatedData[i].amount;
+            }   
+ 
         }
     }
 
