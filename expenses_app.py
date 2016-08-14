@@ -27,7 +27,6 @@ def initialize():
         init_db()
         return render_template('initialize.html')
     elif request.method == 'POST':
-        print('HELLO')
         users = request.form['persons']
         cats = request.form['categories']
 
@@ -71,7 +70,6 @@ def update_entry():
     new_category = request.form['category']
     new_description = request.form['description']
     txn_id = request.form['txn_id']
-    print(new_person, new_date, new_amount, new_category, new_description, txn_id)
 
     update_expense(new_person, new_date, new_amount, new_category, new_description, txn_id)
 
@@ -145,6 +143,6 @@ def backup_db():
 
 if __name__ == '__main__':
     if 'HEROKU_CHECK' in os.environ:
-        app.run(debug=True, host='0.0.0.0', port=int(os.environ.get('PORT')))
+        app.run(debug=False, host='0.0.0.0', port=int(os.environ.get('PORT')))
     else:
         app.run(debug=True)
