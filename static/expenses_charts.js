@@ -82,7 +82,7 @@ function drawCharts(aggregatedData, chartType, dateFrom, dateTo, categoriesSelec
                 amounts[aggregatedData[i].person.toLowerCase()] += aggregatedData[i].amount;
             }
             else if (dateGroups.indexOf(display) >= 0) {
-                groupbyDate(display);
+                groupbyDate(display, aggregatedData[i], amounts);
             }
         }
     }
@@ -149,20 +149,20 @@ function drawCharts(aggregatedData, chartType, dateFrom, dateTo, categoriesSelec
     }
 }
 
-function groupbyDate(period) {
-    var dateWrapper = moment(new Date(aggregatedData[i].date)).startOf("year");
-    if (display == "year") {
-        amounts[dateWrapper.format("YYYY")] += aggregatedData[i].amount;
-    } else if (display == "month") {
-        dateWrapper = moment(new Date(aggregatedData[i].date)).startOf("month");
-        amounts[dateWrapper.format("MMM YYYY")] += aggregatedData[i].amount;
+function groupbyDate(period, row, amounts) {
+    var dateWrapper = moment(new Date(row.date)).startOf("year");
+    if (period == "year") {
+        amounts[dateWrapper.format("YYYY")] += row.amount;
+    } else if (period == "month") {
+        dateWrapper = moment(new Date(row.date)).startOf("month");
+        amounts[dateWrapper.format("MMM YYYY")] += row.amount;
     }
-    else if (display == "week") {
-        dateWrapper = moment(new Date(aggregatedData[i].date)).startOf("week");
-        amounts["Week of " + dateWrapper.format("MMM Do, YYYY")] += aggregatedData[i].amount;
+    else if (period == "week") {
+        dateWrapper = moment(new Date(row.date)).startOf("week");
+        amounts["Week of " + dateWrapper.format("MMM Do, YYYY")] += row.amount;
     }
-    else if (display == "day") {
-        dateWrapper = moment(new Date(aggregatedData[i].date));
-        amounts[dateWrapper.format("MMM Do, YYYY")] += aggregatedData[i].amount;
+    else if (period == "day") {
+        dateWrapper = moment(new Date(row.date));
+        amounts[dateWrapper.format("MMM Do, YYYY")] += row.amount;
     }
 }

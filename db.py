@@ -23,59 +23,6 @@ def check_heroku_db():
 
     return False
 
-def check_db_exists():
-    if check_heroku_db == False:
-        return False
-    else:
-        return True
-
-def init_db():
-    p = system('psql -U postgres postgres -f create_db.sql') # ADD TO README INSTEAD
-    conn = check_heroku_db()
-    cur = conn.cursor()
-
-    cur.execute('''CREATE TABLE ledger
-                   (id SERIAL PRIMARY KEY,
-                   person_id   SERIAL NOT NULL,
-                   category_id SERIAL     NOT NULL,
-                   amount      NUMERIC(10) NOT NULL,
-                   txn_date    DATE        NOT NULL,
-                   description TEXT);
-                ''')
-
-    cur.execute('''CREATE TABLE persons
-                    (id SERIAL PRIMARY KEY,
-                    person_name TEXT NOT NULL UNIQUE);
-                ''')
-
-    cur.execute('''CREATE TABLE categories
-                    (id SERIAL PRIMARY KEY,
-                    cat_name TEXT NOT NULL UNIQUE);
-                ''')
-
-    conn.commit()
-    conn.close()
-
-
-def init_tables(persons, categories):
-    conn = check_heroku_db()
-    cur = conn.cursor()
-    cur.execute("SELECT table_name FROM information_schema.tables WHERE table_schema='public' AND table_type='BASE TABLE';")
-
-    print(persons, categories)
-
-    for person in persons:
-        cur.execute('''INSERT INTO persons (person_name) VALUES (%s);''', (person, ))
-    if len(persons) > 1:
-        cur.execute('''INSERT INTO persons (person_name) VALUES ('together');''')
-
-    for category in categories:
-        cur.execute('''INSERT INTO categories (cat_name) VALUES (%s);''', (category, ))
-
-    conn.commit()
-    conn.close()
-    return persons, categories
-
 def connect():
     try:
         conn = check_heroku_db()

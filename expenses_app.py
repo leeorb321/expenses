@@ -5,39 +5,14 @@ from db import *
 import os
 app = Flask(__name__)
 
-persons, categories = None, None
-if (check_db_exists()):
-    persons, categories = connect()
-
 @app.route('/')
 def index():
-    global persons
-    global categories
-    if (check_db_exists() == False):
-        return redirect('/initialize')
-    else:
-        persons, categories = connect()
-        return render_template('index.html')
-
-@app.route('/initialize', methods=['GET','POST'])
-def initialize():
-    global persons
-    global categories
-    if request.method == 'GET':
-        init_db()
-        return render_template('initialize.html')
-    elif request.method == 'POST':
-        users = request.form['persons']
-        cats = request.form['categories']
-
-        users = [ person.lower().strip() for person in users.split(',') ]
-        cats = [ category.lower().strip() for category in cats.split(',') ]
-        init_tables(users, cats)
-        return redirect('/')
+    return render_template('index.html')
 
 @app.route('/submit_expense', methods=['GET','POST'])
 def submit_page():
     if request.method == 'GET':
+        persons, categories = connect()
         return render_template(
             'submit_expense.html',
             categories=categories,
@@ -77,6 +52,7 @@ def update_entry():
 
 @app.route('/retrieve_data', methods=['GET'])
 def retrieve_data():
+    persons, categories = connect()
     data, total = display_all_data()
 
     return render_template(
@@ -89,6 +65,7 @@ def retrieve_data():
 
 @app.route('/visualize', methods=['GET','POST'])
 def visualize():
+    persons, categories = connect()
     data, total = display_all_data()
 
     if request.method == 'GET':
