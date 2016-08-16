@@ -104,9 +104,9 @@ function drawCharts(aggregatedData, chartType, dateFrom, dateTo, categoriesSelec
 
         var dataChart = new Chart(canvas).Pie(chartData);
 
-    } else if (chartType == "bar") {
+    } else if (chartType == "line" || chartType == "bar") {
 
-        var barLabels = Object.keys(displayBins).map(function(k) {
+        var chartLabels = Object.keys(displayBins).map(function(k) {
             return displayBins[k].charAt(0).toUpperCase() + displayBins[k].slice(1);
         });
 
@@ -115,44 +115,36 @@ function drawCharts(aggregatedData, chartType, dateFrom, dateTo, categoriesSelec
           amountsData.push(amounts[displayBins[i]]);
         }
 
-        var chartData = {
-            labels: barLabels,
-            datasets: [
-                {
-                    label: "First Data Set",
-                    fillColor : "rgba(172,194,132,0.4)",
-                    data: amountsData
-                }
-            ]
-        };
+        if (chartType == "line") {
+            var chartData = {
+                labels: chartLabels,
+                datasets: [
+                    {
+                        fillColor : "rgba(172,194,132,0.4)",
+                        strokeColor : "#ACC26D",
+                        pointColor : "#fff",
+                        pointStrokeColor : "#9DB86D",
+                        data: amountsData
+                    }
+                ]
+            };
 
-        var dataChart = new Chart(canvas).Bar(chartData);
+            var dataChart = new Chart(canvas).Line(chartData);
 
-    } else if (chartType == "line") {
+        } else if (chartType == "bar") {
+            var chartData = {
+                labels: chartLabels,
+                datasets: [
+                    {
+                        label: "First Data Set",
+                        fillColor : "rgba(172,194,132,0.4)",
+                        data: amountsData
+                    }
+                ]
+            };
 
-        var lineLabels = Object.keys(displayBins).map(function(k) {
-            return displayBins[k].charAt(0).toUpperCase() + displayBins[k].slice(1);
-        });
-
-        var amountsData = [];
-        for (var i = 0; i < displayBins.length; i++) {
-          amountsData.push(amounts[displayBins[i]]);
+            var dataChart = new Chart(canvas).Bar(chartData);
         }
-
-        var chartData = {
-            labels: lineLabels,
-            datasets: [
-                {
-                    fillColor : "rgba(172,194,132,0.4)",
-                    strokeColor : "#ACC26D",
-                    pointColor : "#fff",
-                    pointStrokeColor : "#9DB86D",
-                    data: amountsData
-                }
-            ]
-        };
-
-        var dataChart = new Chart(canvas).Line(chartData);
 
     }
 }
