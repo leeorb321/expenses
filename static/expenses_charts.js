@@ -71,7 +71,7 @@ function drawCharts(aggregatedData, chartType, dateFrom, dateTo, categoriesSelec
         var checkDateTo = moment(aggregatedData[i].date).isSameOrBefore(dateTo);
         var checkPersons = personsSelected.indexOf(aggregatedData[i].person.toLowerCase()) > -1;
         var checkCategories = categoriesSelected.indexOf(aggregatedData[i].category.toLowerCase()) > -1;
-        var dateWrapper = moment(new Date(aggregatedData[i].date));
+        var dateGroups = ["year", "month", "week", "day"];
 
         if (checkDateFrom && checkDateTo && checkCategories && checkPersons) {
 
@@ -81,23 +81,9 @@ function drawCharts(aggregatedData, chartType, dateFrom, dateTo, categoriesSelec
             else if (display == "person") {
                 amounts[aggregatedData[i].person.toLowerCase()] += aggregatedData[i].amount;
             }
-            else if (display == "year") {
-                dateWrapper = moment(new Date(aggregatedData[i].date)).startOf("year");
-                amounts[dateWrapper.format("YYYY")] += aggregatedData[i].amount;
+            else if (dateGroups.indexOf(display) >= 0) {
+                groupbyDate(display);
             }
-            else if (display == "month") {
-                dateWrapper = moment(new Date(aggregatedData[i].date)).startOf("month");
-                amounts[dateWrapper.format("MMM YYYY")] += aggregatedData[i].amount;
-            }
-            else if (display == "week") {
-                dateWrapper = moment(new Date(aggregatedData[i].date)).startOf("week");
-                amounts["Week of " + dateWrapper.format("MMM Do, YYYY")] += aggregatedData[i].amount;
-            }
-            else if (display == "day") {
-                dateWrapper = moment(new Date(aggregatedData[i].date));
-                amounts[dateWrapper.format("MMM Do, YYYY")] += aggregatedData[i].amount;
-            }
-
         }
     }
 
@@ -171,3 +157,20 @@ function drawCharts(aggregatedData, chartType, dateFrom, dateTo, categoriesSelec
     }
 }
 
+function groupbyDate(period) {
+    var dateWrapper = moment(new Date(aggregatedData[i].date)).startOf("year");
+    if (display == "year") {
+        amounts[dateWrapper.format("YYYY")] += aggregatedData[i].amount;
+    } else if (display == "month") {
+        dateWrapper = moment(new Date(aggregatedData[i].date)).startOf("month");
+        amounts[dateWrapper.format("MMM YYYY")] += aggregatedData[i].amount;
+    }
+    else if (display == "week") {
+        dateWrapper = moment(new Date(aggregatedData[i].date)).startOf("week");
+        amounts["Week of " + dateWrapper.format("MMM Do, YYYY")] += aggregatedData[i].amount;
+    }
+    else if (display == "day") {
+        dateWrapper = moment(new Date(aggregatedData[i].date));
+        amounts[dateWrapper.format("MMM Do, YYYY")] += aggregatedData[i].amount;
+    }
+}
