@@ -5,14 +5,29 @@
   <div class=page>
   <h1>Display Data</h1>
     <div class=new-expense>
-      <table border="1" id="datatable" align="center"><tr>
-          <th id="modify">Modify</th>
-          <th id="date">Transaction Date</th>
-          <th id="amount">Amount</th>
-          <th id="category">Category</th>
-          <th>Description</th>
-          <th id="person">Person</th>
+      <table border="1" id="datatable" align="center" class="table table-striped">
+        <thead>
+          <tr>
+            <th id="modify">Modify</th>
+            <th id="date">Transaction Date</th>
+            <th id="amount">Amount</th>
+            <th id="category">Category</th>
+            <th>Description</th>
+            <th id="person">Person</th>
           </tr>
+        </thead>
+        <tbody>
+            {% for row in data %}
+              <tr>
+                  <td></td>
+                  <td>{{ row['date'] }}</td>
+                  <td>{{ "${:.2f}".format(row['amount']|float) }}</td>
+                  <td>{{ row['category'] }}</td>
+                  <td>{{ row['description'] }}</td>
+                  <td>{{ row['person'] }}</td>
+              </tr>
+              {% endfor %}
+        </tbody>
       </table>
 
       <form hidden id='modified_entry' method='post' action='update_entry'>
@@ -61,18 +76,10 @@
         $("#datatable tbody").append(row);
     }
 
-    drawTable(expensesData);
-
-    document.getElementById("amount").onclick = function() {
-      var sortedByAmount = expensesData.sort(function(a,b) {
-        return parseFloat(a.amount) - parseFloat(b.amount);
-      });
-      drawTable(sortedByAmount);
-    }
-
     var radioValue = 0;
 
     $(document).ready(function(){
+      $('#datatable').DataTable();
       $("input[type='radio']").click(function(){
         radioValue = $("input[name='toModify']:checked").val();
         if(radioValue){

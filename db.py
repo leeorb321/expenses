@@ -5,28 +5,30 @@ import urllib.parse
 import os
 
 def check_heroku_db():
-    if 'DATABASE_URL' in os.environ and os.environ['DATABASE_URL']:
-        urllib.parse.uses_netloc.append("postgres")
-        url = urllib.parse.urlparse(os.environ["DATABASE_URL"])
+    # if 'DATABASE_URL' in os.environ and os.environ['DATABASE_URL']:
+    #     urllib.parse.uses_netloc.append("postgres")
+    #     url = urllib.parse.urlparse(os.environ["DATABASE_URL"])
 
-        conn = psycopg2.connect(
-            database=url.path[1:],
-            user=url.username,
-            password=url.password,
-            host=url.hostname,
-            port=url.port
-        )
-        return conn
-    else:
+    #     conn = psycopg2.connect(
+    #         database=url.path[1:],
+    #         user=url.username,
+    #         password=url.password,
+    #         host=url.hostname,
+    #         port=url.port
+    #     )
+    #     return conn
+    # else:
         conn = psycopg2.connect(database="expenses")
         return conn
 
-    return False
+    # return False
 
 def connect():
     try:
         conn = check_heroku_db()
         cur = conn.cursor()
+
+        print(conn)
 
         cur.execute('''SELECT person_name FROM persons;''')
         persons = [ person[0] for person in list(cur.fetchall()) ]
