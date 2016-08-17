@@ -5,7 +5,7 @@
   <div class=page>
   <h1>Display Data</h1>
     <div class=new-expense>
-      <table border="1" id="datatable" align="center" class="table table-striped">
+      <table id="datatable" align="center" class="table table-striped">
         <thead>
           <tr>
             <th id="modify">Modify</th>
@@ -55,45 +55,27 @@
   </div>
 
   <script type="text/javascript">
-
-    var expensesData = {{data|tojson}};
-
-    function drawTable(allData) {
-        for (var i = 0; i < allData.length; i++) {
-            drawRow(allData[i]);
-        }
-    }
-
-    function drawRow(rowData) {
-        var row = $("<tr>")
-        row.append("<td align='center'><input type='radio' name='toModify' value='" + rowData.id + "'/></td>");
-        var fDate = new Date((rowData.date).substring(0,(rowData.date).length - 4)).toLocaleDateString("en-US");
-        row.append($("<td>" + fDate + "</td>"));
-        row.append($("<td>$" + parseFloat(Math.round(rowData.amount * 100) / 100).toFixed(2) + "</td>"));
-        row.append($("<td>" + rowData.category + "</td>"));
-        row.append($("<td>" + rowData.description + "</td>"));
-        row.append($("<td>" + rowData.person + "</td></tr>"));
-        $("#datatable tbody").append(row);
-    }
-
-    var radioValue = 0;
+  
+    // var radioValue = 0;
 
     $(document).ready(function(){
-      $('#datatable').DataTable();
-      $("input[type='radio']").click(function(){
-        radioValue = $("input[name='toModify']:checked").val();
-        if(radioValue){
-          $("#modified_entry").show();
-        }
+      $('#datatable').DataTable( {
+        "lengthMenu": [[25, 50, 100, -1], [25, 50, 100, "All"]]
       });
+      // $("input[type='radio']").click(function(){
+      //   radioValue = $("input[name='toModify']:checked").val();
+      //   if(radioValue){
+      //     $("#modified_entry").show();
+      //   }
+      // });
 
-      $("#modified_entry").submit( function(eventObj) {
-        $('<input />').attr('type', 'hidden')
-            .attr('name', "txn_id")
-            .attr('value', radioValue)
-            .appendTo('#modified_entry');
-        return true;
-        });
+      // $("#modified_entry").submit( function(eventObj) {
+      //   $('<input />').attr('type', 'hidden')
+      //       .attr('name', "txn_id")
+      //       .attr('value', radioValue)
+      //       .appendTo('#modified_entry');
+      //   return true;
+      // });
     });
 
   </script>
