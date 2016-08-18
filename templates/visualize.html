@@ -32,37 +32,65 @@
           </div>
 
           <div class="col-md-4">
-          <label>End Date:</label>
+            <label>Categories:</label><br>
+            <select name="categories_chosen" multiple>
+              {% for category in categories%}
+                <option value="{{ category }}">{{ category.capitalize() }}</option>
+              {% endfor %}
+            </select>
+          </div>
+
+        </div>
+        <br>
+
+        <div class="row">
+
+          <div class="col-md-4 dropdown">
+            <label>Display By:</label><br>
+            <select name="display">
+              <option value="category" selected="selected">Category</option>
+              <option value="person">Person</option>
+              <option value="year">Year</option>
+              <option value="month">Month</option>
+              <option value="week">Week</option>
+              <option value="day">Day</option>
+            </select>
+          </div>
+
+          <div class="col-md-4">
+            <label>End Date:</label>
             <input type="date" name="date_to" class="form-control">
+          </div>
+
+          <div class="col-md-4">
+            <label>Persons:</label><br>
+            <select name="persons_chosen" multiple>
+              {% for person in persons%}
+                <option value="{{ person }}">{{ person.capitalize() }}</option>
+              {% endfor %}
+            </select>
+
           </div>
 
         </div>
 
+        <div class="row">
+          <div class="col-md-4"></div>
+          <div class="col-md-4"></div>
+          <div class="col-md-4">
+            <br>
+            <button class="btn btn-primary" name="submit" type="submit">Submit</button>
+          </div>
+        </div>
 
       </div>
-        Categories:
-        <select name="categories_chosen" multiple>
-          {% for category in categories%}
-            <option value="{{ category }}">{{ category.capitalize() }}</option>
-          {% endfor %}
-        </select>
-        Persons:
-        <select name="persons_chosen" multiple>
-          {% for person in persons%}
-            <option value="{{ person }}">{{ person.capitalize() }}</option>
-          {% endfor %}
-        </select>
-        Display By:
-        <select name="display">
-          <option value="category">Category</option>
-          <option value="person">Person</option>
-          <option value="year">Year</option>
-          <option value="month">Month</option>
-          <option value="week">Week</option>
-          <option value="day">Day</option>
-        </select>
-        <input type="submit" name="submit">
+
+    </form>
+
     </div>
+
+
+
 
     <canvas id="all-data" width="600" height="400"></canvas>
 
@@ -81,6 +109,7 @@
         $(document).ready(function() {
           $("select[name='categories_chosen']").multiselect();
           $("select[name='persons_chosen']").multiselect();
+          $("select[name='display']").multiselect();
         });
     </script>
 
