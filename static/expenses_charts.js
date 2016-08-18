@@ -91,61 +91,51 @@ function drawCharts(aggregatedData, chartType, dateFrom, dateTo, categoriesSelec
       amounts[displayBins[i]] = parseFloat(Math.round(amounts[displayBins[i]] * 100) / 100).toFixed(2);
     }
 
-    if (chartType == "pie"){
+    var chartLabels = Object.keys(displayBins).map(function(k) {
+        return displayBins[k].charAt(0).toUpperCase() + displayBins[k].slice(1);
+    });
 
-        var chartData = [];
-        for (var i = 0; i < displayBins.length; i++) {
-          chartData.push({
-            value: amounts[displayBins[i]],
-            label: displayBins[i],
-            color: "#"+Math.floor(Math.random()*16777215).toString(16)
-          });
-        }
+    var amountsData = [];
+    var chartColors = [];
+    for (var i = 0; i < displayBins.length; i++) {
+      amountsData.push(amounts[displayBins[i]]);
+      chartColors.push("#"+Math.floor(Math.random()*16777215).toString(16));
+    }
 
-        var dataChart = new Chart(canvas).Pie(chartData);
+    var chartData = {
+        labels: chartLabels,
+        datasets: [
+            {
+                // fillColor : "rgba(172,194,132,0.4)",
+                // strokeColor : "#ACC26D",
+                // pointColor : "#fff",
+                // pointStrokeColor : "#9DB86D",
+                backgroundColor: chartColors,
+                data: amountsData
+            }
+        ]
+    };
 
-    } else if (chartType == "line" || chartType == "bar") {
+    if (chartType == "pie") {
 
-        var chartLabels = Object.keys(displayBins).map(function(k) {
-            return displayBins[k].charAt(0).toUpperCase() + displayBins[k].slice(1);
+        var dataChart = new Chart(canvas, {
+                    type: 'pie',
+                    data: chartData
+                });
+
+    } else if (chartType == "line") {
+
+        var dataChart = new Chart(canvas, {
+            type: 'line',
+            data: chartData
         });
 
-        var amountsData = [];
-        for (var i = 0; i < displayBins.length; i++) {
-          amountsData.push(amounts[displayBins[i]]);
-        }
+    } else if (chartType == "bar") {
 
-        if (chartType == "line") {
-            var chartData = {
-                labels: chartLabels,
-                datasets: [
-                    {
-                        fillColor : "rgba(172,194,132,0.4)",
-                        strokeColor : "#ACC26D",
-                        pointColor : "#fff",
-                        pointStrokeColor : "#9DB86D",
-                        data: amountsData
-                    }
-                ]
-            };
-
-            var dataChart = new Chart(canvas).Line(chartData);
-
-        } else if (chartType == "bar") {
-            var chartData = {
-                labels: chartLabels,
-                datasets: [
-                    {
-                        label: "First Data Set",
-                        fillColor : "rgba(172,194,132,0.4)",
-                        data: amountsData
-                    }
-                ]
-            };
-
-            var dataChart = new Chart(canvas).Bar(chartData);
-        }
-
+        var dataChart = new Chart(canvas, {
+            type: 'bar',
+            data: chartData
+        });
     }
 }
 
