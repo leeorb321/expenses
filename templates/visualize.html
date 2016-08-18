@@ -9,17 +9,36 @@
   <h1>Visualize Data</h1>
 
     <div id="chart-options">
-      <form method="post" action="visualize">
-      Chart Type:
-        <select name="chart_type">
-          <option value="pie">Pie</option>
-          <option value="bar">Bar</option>
-          <option value="line">Line</option>
-        </select>
-        Date Range:
-        <input type="date" name="date_from">
-        <input type="date" name="date_to">
-        <br>
+      <form method="post" action="visualize" class="container">
+      <div class="form-group">
+
+        <div class="row">
+
+          <div class="col-md-4">
+            <label>Chart Type:</label>
+            <select name="chart_type" class="form-control">
+              <option value="pie">Pie</option>
+              <option value="bar">Bar</option>
+              <option value="line">Line</option>
+            </select>
+          </div>
+
+          <div class="col-md-4">
+            <label>Start Date:</label>
+            <input type="date" name="date_from" class="form-control">
+          </div>
+
+          <div class="col-md-4">
+          <label>End Date:</label>
+            <input type="date" name="date_to" class="form-control">
+          </div>
+
+        </div>
+
+
+      </div>
+
+
         Categories:
         <select name="categories_chosen" multiple>
           <option value="all">Select All</option>
