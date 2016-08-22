@@ -2,80 +2,86 @@
 {% block title %}Display Data{% endblock %}
 
 {% block content %}
+  <link rel="stylesheet" href="https://cdn.datatables.net/fixedheader/3.1.2/css/fixedHeader.dataTables.min.css">
+  <script src="https://cdn.datatables.net/fixedheader/3.1.2/js/dataTables.fixedHeader.min.js"></script>
+
   <div class=page>
   <h1>Display Data</h1>
-    <div class=new-expense>
-      <table id="datatable" align="center" class="table table-striped">
-        <thead>
-          <tr>
-            <th id="modify">Modify</th>
-            <th id="date">Transaction Date</th>
-            <th id="amount">Amount</th>
-            <th id="category">Category</th>
-            <th>Description</th>
-            <th id="person">Person</th>
-          </tr>
-        </thead>
-        <tbody>
-            {% for row in data %}
-              <tr>
-                  <td></td>
-                  <td>{{ row['date'] }}</td>
-                  <td>{{ "${:.2f}".format(row['amount']|float) }}</td>
-                  <td>{{ row['category'] }}</td>
-                  <td>{{ row['description'] }}</td>
-                  <td>{{ row['person'] }}</td>
-              </tr>
-              {% endfor %}
-        </tbody>
-      </table>
+    <table id="datatable" align="center" class="table table-striped">
+      <thead>
+        <tr>
+          <th id="edit">Edit</th>
+          <th id="date">Transaction Date</th>
+          <th id="amount">Amount</th>
+          <th id="category">Category</th>
+          <th>Description</th>
+          <th id="person">Person</th>
+        </tr>
+      </thead>
+      <tbody>
+          {% for row in data %}
+            <tr>
+                <td value="{{row['id']}}">
+                <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#modify_modal">Edit</button></td>
+                <td>{{ row['date'] }}</td>
+                <td>{{ "${:.2f}".format(row['amount']|float) }}</td>
+                <td>{{ row['category'] }}</td>
+                <td>{{ row['description'] }}</td>
+                <td>{{ row['person'] }}</td>
+            </tr>
+            {% endfor %}
+      </tbody>
+    </table>
 
-      <form hidden id='modified_entry' method='post' action='update_entry'>
-      <p>
-         Date:       <input type='date' name='expense_date' />
-         Amount: $   <input autocomplete='off' type='text' name='amount' />
-         Person:     <select name='person'>
-                     {% for person in persons %}
-                         <option value='{{ person }}'>{{ person.capitalize() }}</option>
-                     {% endfor %}
-                     </select>
-          </p><p>
-          Category:   <select name='category'>
-                      {% for category in categories %}
-                          <option value='{{ category }}'>{{ category.capitalize() }}</option>
-                      {% endfor %}
-                          <option value='add_category'>Add Category</option>
-                      </select>
-         Description: <input type='text' name='description' />
-         <input type='submit' value='Submit'>
-       </p>
-       </form>
-      <p align="center">Total: {{ "${:.2f}".format(total) }}</p>
+    <div id="modify_modal" class="modal fade" role="dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Modal Header</h4>
+        </div>
+        <div class="modal-body">
+          <h2>Edit Entry</h2>
+          <label>Transaction Date:</label>
+            <input type="date" class="form-control">
+          <label>Amount:</label>
+            <input type="number" class="form-control">
+          <label>Category:</label>
+            <select name='category' class="form-control">
+              {% for category in categories %}
+                  <option value='{{ category }}'>{{ category.capitalize() }}</option>
+              {% endfor %}
+            </select>
+          <label>Description:</label>
+            <input type="text" class="form-control">
+          <label>Person:</label>
+            <select name='person' class="form-control">
+              {% for person in persons %}
+                  <option value='{{ person }}'>{{ person.capitalize() }}</option>
+              {% endfor %}
+            </select>
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
     </div>
+
+
+    <p align="center">Total: {{ "${:.2f}".format(total) }}</p>
   </div>
 
   <script type="text/javascript">
-  
-    // var radioValue = 0;
 
     $(document).ready(function(){
-      $('#datatable').DataTable( {
-        "lengthMenu": [[25, 50, 100, -1], [25, 50, 100, "All"]]
-      });
-      // $("input[type='radio']").click(function(){
-      //   radioValue = $("input[name='toModify']:checked").val();
-      //   if(radioValue){
-      //     $("#modified_entry").show();
-      //   }
-      // });
 
-      // $("#modified_entry").submit( function(eventObj) {
-      //   $('<input />').attr('type', 'hidden')
-      //       .attr('name', "txn_id")
-      //       .attr('value', radioValue)
-      //       .appendTo('#modified_entry');
-      //   return true;
-      // });
+      $('#datatable').DataTable( {
+        "lengthMenu": [[25, 50, 100, -1], [25, 50, 100, "All"]],
+        "order": [[ 1, "desc" ]],
+        fixedHeader: true
+      });
+
     });
 
   </script>

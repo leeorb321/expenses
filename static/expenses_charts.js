@@ -2,7 +2,6 @@ function randRGB() {
     return Math.floor(Math.random() * (255 + 1));
 }
 
-
 function updateCharts(aggregatedData, categories, persons, chartObject) {
     var chartSelector = $("select[name=chart_type]")[0];
     if (chartSelector.value === '')
@@ -118,7 +117,6 @@ function drawCharts(aggregatedData, chartType, dateFrom, dateTo, categoriesSelec
         }
     }
 
-
     var amounts = {};
     for (var i = 0; i < displayBins.length; i++) {
         amounts[displayBins[i]] = 0;
@@ -172,7 +170,6 @@ function drawCharts(aggregatedData, chartType, dateFrom, dateTo, categoriesSelec
     };
 
     if (chartObject != null) {
-        chartObject.clear();
         chartObject.destroy();
     }
 

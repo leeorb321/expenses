@@ -5,8 +5,8 @@
   <script type="text/javascript" src="{{ url_for('static', filename='expenses_charts.js') }}"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.2.1/Chart.js"></script>
 
- <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/css/bootstrap-multiselect.css" rel="stylesheet">
- <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/js/bootstrap-multiselect.min.js"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/css/bootstrap-multiselect.css" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/js/bootstrap-multiselect.min.js"></script>
 
   <div class="page">
   <h1>Visualize Data</h1>
@@ -93,12 +93,6 @@
         var aggregatedData = {{data|tojson}};
         var categories = {{categories|tojson}};
         var persons = {{persons|tojson}};
-        var categoriesChosen = {{categoriesSelected|tojson}};
-        var personsChosen = {{personsSelected|tojson}};
-        var chartType = "{{chartType}}";
-        var dateFrom = "{{dateFrom}}";
-        var dateTo = "{{dateTo}}";
-        var display = "{{display}}";
 
         for (var i = 0; i < aggregatedData.length; i++) {
           aggregatedData[i].date = new Date(aggregatedData[i].date);

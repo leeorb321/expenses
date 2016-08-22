@@ -29,7 +29,7 @@ function checkAdd() {
                   {% endfor %}
                   </select>
       Date:       <input type='date' name='expense_date' />
-      Amount:     <input type='text' name='amount' />
+      Amount:     <input type='number' name='amount' />
       </p><p>
       Category:   <select name='category' onChange='checkAdd()'>
                   {% for category in categories %}
