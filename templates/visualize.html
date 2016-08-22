@@ -78,13 +78,14 @@
           <div class="col-md-4"></div>
           <div class="col-md-4">
             <br>
-            <button class="btn btn-primary" onclick="updateChartParams(aggregatedData, categories, persons, mainChart)">Submit</button>
+            <button class="btn btn-primary" id="submit-button">Submit</button>
           </div>
         </div>
       </div>
     </div>
-
-    <canvas id="all-data" width="600" height="400"></canvas>
+    <div id="canvas-container">
+      <canvas id="all-data" width="600" height="400"></canvas>
+    </div>
 
     <script type="text/javascript">
         var canvas = document.getElementById("all-data").getContext("2d");
@@ -104,6 +105,10 @@
         }
 
         var mainChart = drawCharts(aggregatedData, chartType, dateFrom, dateTo, categoriesChosen, personsChosen, display);
+
+        $("#submit-button").on("click", function() {
+          updateCharts(aggregatedData, categories, persons, mainChart);
+        });
 
         $(document).ready(function() {
           $("select[name='categories_chosen']").multiselect();

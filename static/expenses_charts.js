@@ -1,6 +1,4 @@
-function updateChartParams(aggregatedData, categories, persons, chartObject) {
-    console.log(chartObject);
-
+function updateCharts(aggregatedData, categories, persons, chartObject) {
     var chartSelector = $("select[name=chart_type]")[0];
     if (chartSelector.value === '')
         chartType = 'pie';
@@ -47,8 +45,11 @@ function updateChartParams(aggregatedData, categories, persons, chartObject) {
         }
     }
 
-    drawCharts(aggregatedData, chartType, dateFrom, dateTo, categoriesChosen, personsChosen, display, chartObject);
+    var newChart = drawCharts(aggregatedData, chartType, dateFrom, dateTo, categoriesChosen, personsChosen, display, chartObject);
 
+    $("#submit-button").on("click", function() {
+        updateCharts(aggregatedData, categories, persons, newChart);
+    });
 }
 
 function drawCharts(aggregatedData, chartType, dateFrom, dateTo, categoriesSelected, personsSelected, display, chartObject) {
@@ -166,6 +167,7 @@ function drawCharts(aggregatedData, chartType, dateFrom, dateTo, categoriesSelec
     };
 
     if (chartObject != null) {
+        chartObject.clear();
         chartObject.destroy();
     }
 
