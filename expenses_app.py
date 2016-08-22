@@ -40,11 +40,14 @@ def add_category():
 @app.route('/update_entry', methods=['POST'])
 def update_entry():
     new_person = request.form['person']
-    new_date = request.form['expense_date']
-    new_amount = int(float(request.form['amount'])*100)
+    new_date = request.form['date']
+    new_amount = int(request.form['amount'].replace('.','').replace('$',''))
     new_category = request.form['category']
     new_description = request.form['description']
     txn_id = request.form['txn_id']
+
+    print("TEST")
+    print("HERE:",new_person, new_date, new_category, new_amount, new_description,txn_id)
 
     update_expense(new_person, new_date, new_amount, new_category, new_description, txn_id)
 
@@ -53,12 +56,11 @@ def update_entry():
 @app.route('/retrieve_data', methods=['GET'])
 def retrieve_data():
     persons, categories = connect()
-    data, total = display_all_data()
+    data = display_all_data()
 
     return render_template(
         'results.html',
         data=data,
-        total=total,
         persons=persons,
         categories=categories
     )
@@ -66,7 +68,7 @@ def retrieve_data():
 @app.route('/visualize', methods=['GET'])
 def visualize():
     persons, categories = connect()
-    data, total = display_all_data()
+    data = display_all_data()
 
     if request.method == 'GET':
         chart_type = 'pie'

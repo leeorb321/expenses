@@ -41,33 +41,35 @@
         </div>
         <div class="modal-body">
           <h2>Edit Entry</h2>
-          <label>Transaction Date:</label>
-            <input type="date" class="form-control" name="date">
-          <label>Amount:</label>
-            <input type="text" class="form-control" name="amount">
-          <label>Category:</label>
-            <select name='category' class="form-control" name="category">
-              {% for category in categories %}
-                  <option value='{{ category }}'>{{ category.capitalize() }}</option>
-              {% endfor %}
-            </select>
-          <label>Description:</label>
-            <input type="text" class="form-control" name="description">
-          <label>Person:</label>
-            <select name='person' class="form-control" name="person">
-              {% for person in persons %}
-                  <option value='{{ person }}'>{{ person.capitalize() }}</option>
-              {% endfor %}
-            </select>
-
+          <form id="modify_form" action="update_entry" method="post" role="form">
+            <input type="text" name="txn_id" hidden />
+            <label>Transaction Date:</label>
+              <input type="date" class="form-control" name="date" />
+            <label>Amount:</label>
+              <input type="text" class="form-control" name="amount" />
+            <label>Category:</label>
+              <select name='category' class="form-control" name="category">
+                {% for category in categories %}
+                    <option value='{{ category }}'>{{ category.capitalize() }}</option>
+                {% endfor %}
+              </select>
+            <label>Description:</label>
+              <input type="text" class="form-control" name="description" />
+            <label>Person:</label>
+              <select name='person' class="form-control" name="person">
+                {% for person in persons %}
+                    <option value='{{ person }}'>{{ person.capitalize() }}</option>
+                {% endfor %}
+              </select>
+              <input type='submit' value='Submit' />
+            </form>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button type="button" id="submit_form" class="btn btn-default" data-dismiss="modal">Close</button>
         </div>
       </div>
     </div>
 
-    <p align="center">Total: {{ "${:.2f}".format(total) }}</p>
   </div>
 
   <script type="text/javascript">
@@ -92,13 +94,28 @@
         var desc_content = $(this).children("td#description").text();
         var person_content = $(this).children("td#person").text();
 
+        $("input[name='txn_id']").val(id);
         $("input[name='date']").val(date_content);
         $("input[name='amount']").val(amt_content);
         $("select[name='category']").val(lowerCaseFirstLetter(cat_content));
         $("input[name='description']").val(desc_content);
         $("select[name='person']").val(lowerCaseFirstLetter(person_content));
-
       });
+
+      $('#submit_form').click(function(){
+        $.ajax({
+            type: "POST",
+            url: "/update_entry",
+            data: $("#modify_form").serialize(),
+            success: function(response) {
+                console.log(response);
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        });
+      });
+
     });
 
   </script>

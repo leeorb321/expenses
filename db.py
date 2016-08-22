@@ -112,7 +112,6 @@ def display_all_data():
         row = [ row[i].capitalize() if type(row[i]) == str and i != 3 else row[i] for i in range(len(row)) ]
         out.append(row)
 
-    total = sum([row[1] for row in out])
     out.sort(key=lambda row: row[0])
 
     out_dicts = []
@@ -128,4 +127,4 @@ def display_all_data():
 
     conn.commit()
     conn.close()
-    return out_dicts, total
+    return out_dicts
