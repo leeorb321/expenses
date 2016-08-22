@@ -63,7 +63,7 @@ def retrieve_data():
         categories=categories
     )
 
-@app.route('/visualize', methods=['GET','POST'])
+@app.route('/visualize', methods=['GET'])
 def visualize():
     persons, categories = connect()
     data, total = display_all_data()
@@ -75,28 +75,6 @@ def visualize():
         selected_categories = categories
         selected_persons = persons
         display = 'category'
-
-    elif request.method == 'POST':
-        chart_type = request.form['chart_type']
-        display = request.form['display']
-
-        if (request.form['date_from'] == ''):
-            date_from = 'None'
-        else:
-            date_from = date_from = request.form['date_from']
-
-        if (request.form['date_to'] == ''):
-            date_to = 'None'
-        else:
-            date_to = request.form['date_to']
-
-        selected_categories = request.form.getlist('categories_chosen')
-        if (selected_categories == [] or selected_categories[0] == 'all'):
-            selected_categories = categories
-
-        selected_persons = request.form.getlist('persons_chosen')
-        if (selected_persons == [] or selected_persons[0] == 'all'):
-            selected_persons = persons
 
     return render_template(
         'visualize.html',
