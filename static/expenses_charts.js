@@ -1,35 +1,51 @@
 function updateChartParams(aggregatedData, categories, persons, chartObject) {
     console.log(chartObject);
 
-    if ($("select[name=chart_type]")[0].value === '')
+    var chartSelector = $("select[name=chart_type]")[0];
+    if (chartSelector.value === '')
         chartType = 'pie';
     else
-        chartType = $("select[name=chart_type]")[0].value;
+        chartType = chartSelector.value;
 
-    if ($("input[name=date_from]")[0].value === '')
+    var dateFromSelector = $("input[name=date_from]")[0];
+    if (dateFromSelector.value === '')
         dateFrom = 'None';
     else
-        dateFrom = $("input[name=date_from]")[0].value;
+        dateFrom = dateFromSelector.value;
 
-    if ($("input[name=date_to]")[0].value === '')
+    var dateToSelector = $("input[name=date_to]")[0];
+    if (dateToSelector.value === '')
         dateTo = 'None';
     else
-        dateTo = ($("input[name=date_to]")[0].value === '');
+        dateTo = (dateToSelector.value === '');
 
-    if ($("select[name=categories_chosen]")[0].value === '')
+    var categorySelector = $("select[name=categories_chosen]")[0];
+    if (categorySelector.value === '')
         categoriesChosen = categories;
-    else
-        categoriesChosen = $("select[name=categories_chosen]")[0].value;
+    else {
+        categoriesChosen = [];
+        for (var i = 0; i < categorySelector.options.length; i++) {
+            if (categorySelector.options[i].selected)
+                categoriesChosen.push(categorySelector.options[i].value);
+        }
+    }
 
-    if ($("select[name=display]")[0].value === '')
+    var displaySelector = $("select[name=display]")[0];
+    if (displaySelector.value === '')
         display = 'category';
     else
-        display = $("select[name=display]")[0].value;
+        display = displaySelector.value;
 
-    if ($("select[name=persons_chosen]")[0].value === '')
+    var personsSelector = $("select[name=persons_chosen]")[0];
+    if (personsSelector.value === '')
         personsChosen = persons;
-    else
-        personsChosen = $("select[name=persons_chosen]")[0].value;
+    else {
+        personsChosen = [];
+        for (var i = 0; i < personsSelector.options.length; i++) {
+            if (personsSelector.options[i].selected)
+                personsChosen.push(personsSelector.options[i].value);
+        }
+    }
 
     drawCharts(aggregatedData, chartType, dateFrom, dateTo, categoriesChosen, personsChosen, display, chartObject);
 
@@ -143,10 +159,6 @@ function drawCharts(aggregatedData, chartType, dateFrom, dateTo, categoriesSelec
         labels: chartLabels,
         datasets: [
             {
-                // fillColor : "rgba(172,194,132,0.4)",
-                // strokeColor : "#ACC26D",
-                // pointColor : "#fff",
-                // pointStrokeColor : "#9DB86D",
                 backgroundColor: chartColors,
                 data: amountsData
             }
@@ -155,7 +167,6 @@ function drawCharts(aggregatedData, chartType, dateFrom, dateTo, categoriesSelec
 
     if (chartObject != null) {
         chartObject.destroy();
-        console.log("destroyed");
     }
 
     if (chartType == "pie") {
