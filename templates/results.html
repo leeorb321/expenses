@@ -19,17 +19,17 @@
         </tr>
       </thead>
       <tbody>
-          {% for row in data %}
-            <tr>
-                <td value="{{row['id']}}">
-                <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#modify_modal">Edit</button></td>
-                <td>{{ row['date'] }}</td>
-                <td>{{ "${:.2f}".format(row['amount']|float) }}</td>
-                <td>{{ row['category'] }}</td>
-                <td>{{ row['description'] }}</td>
-                <td>{{ row['person'] }}</td>
-            </tr>
-            {% endfor %}
+        {% for row in data %}
+          <tr id="{{row['id']}}">
+            <td>
+            <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#modify_modal">Edit</button></td>
+            <td id="date">{{ row['date'] }}</td>
+            <td id="amount">{{ "${:.2f}".format(row['amount']|float) }}</td>
+            <td id="category">{{ row['category'] }}</td>
+            <td id="description">{{ row['description'] }}</td>
+            <td id="person">{{ row['person'] }}</td>
+          </tr>
+        {% endfor %}
       </tbody>
     </table>
 
@@ -42,37 +42,39 @@
         <div class="modal-body">
           <h2>Edit Entry</h2>
           <label>Transaction Date:</label>
-            <input type="date" class="form-control">
+            <input type="date" class="form-control" name="date">
           <label>Amount:</label>
-            <input type="number" class="form-control">
+            <input type="text" class="form-control" name="amount">
           <label>Category:</label>
-            <select name='category' class="form-control">
+            <select name='category' class="form-control" name="category">
               {% for category in categories %}
                   <option value='{{ category }}'>{{ category.capitalize() }}</option>
               {% endfor %}
             </select>
           <label>Description:</label>
-            <input type="text" class="form-control">
+            <input type="text" class="form-control" name="description">
           <label>Person:</label>
-            <select name='person' class="form-control">
+            <select name='person' class="form-control" name="person">
               {% for person in persons %}
                   <option value='{{ person }}'>{{ person.capitalize() }}</option>
               {% endfor %}
             </select>
 
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
         </div>
       </div>
     </div>
-
 
     <p align="center">Total: {{ "${:.2f}".format(total) }}</p>
   </div>
 
   <script type="text/javascript">
+
+    function lowerCaseFirstLetter(string) {
+        return string.charAt(0).toLowerCase() + string.slice(1);
+    }
 
     $(document).ready(function(){
 
@@ -82,6 +84,21 @@
         fixedHeader: true
       });
 
+      $('#datatable tbody tr').click(function(){
+        var id = $(this).attr("id");
+        var date_content = $(this).children("td#date").text();
+        var amt_content = $(this).children("td#amount").text();
+        var cat_content = $(this).children("td#category").text();
+        var desc_content = $(this).children("td#description").text();
+        var person_content = $(this).children("td#person").text();
+
+        $("input[name='date']").val(date_content);
+        $("input[name='amount']").val(amt_content);
+        $("select[name='category']").val(lowerCaseFirstLetter(cat_content));
+        $("input[name='description']").val(desc_content);
+        $("select[name='person']").val(lowerCaseFirstLetter(person_content));
+
+      });
     });
 
   </script>
