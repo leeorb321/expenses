@@ -1,3 +1,8 @@
+function randRGB() {
+    return Math.floor(Math.random() * (255 + 1));
+}
+
+
 function updateCharts(aggregatedData, categories, persons, chartObject) {
     var chartSelector = $("select[name=chart_type]")[0];
     if (chartSelector.value === '')
@@ -150,10 +155,10 @@ function drawCharts(aggregatedData, chartType, dateFrom, dateTo, categoriesSelec
     });
 
     var amountsData = [];
-    var chartColors = [];
+    let chartColors = [];
     for (var i = 0; i < displayBins.length; i++) {
       amountsData.push(amounts[displayBins[i]]);
-      chartColors.push("#"+Math.floor(Math.random()*16777215).toString(16));
+      chartColors.push("rgba(" + randRGB() + ", " + randRGB() + ", " + randRGB() + ", 1)");
     }
 
     var chartData = {
