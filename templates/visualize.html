@@ -12,7 +12,6 @@
   <h1>Visualize Data</h1>
 
     <div id="chart-options">
-      <form method="post" action="visualize" class="container">
       <div class="form-group">
 
         <div class="row">
@@ -79,18 +78,11 @@
           <div class="col-md-4"></div>
           <div class="col-md-4">
             <br>
-            <button class="btn btn-primary" name="submit" type="submit">Submit</button>
+            <button class="btn btn-primary" onclick="updateChartParams(aggregatedData, categories, persons, mainChart)">Submit</button>
           </div>
         </div>
-
       </div>
-
-    </form>
-
     </div>
-
-
-
 
     <canvas id="all-data" width="600" height="400"></canvas>
 
@@ -98,18 +90,20 @@
         var canvas = document.getElementById("all-data").getContext("2d");
 
         var aggregatedData = {{data|tojson}};
+        var categories = {{categories|tojson}};
+        var persons = {{persons|tojson}};
         var categoriesChosen = {{categoriesSelected|tojson}};
         var personsChosen = {{personsSelected|tojson}};
         var chartType = "{{chartType}}";
         var dateFrom = "{{dateFrom}}";
         var dateTo = "{{dateTo}}";
         var display = "{{display}}";
-        
+
         for (var i = 0; i < aggregatedData.length; i++) {
           aggregatedData[i].date = new Date(aggregatedData[i].date);
         }
 
-        drawCharts(aggregatedData, chartType, dateFrom, dateTo, categoriesChosen, personsChosen, display);
+        var mainChart = drawCharts(aggregatedData, chartType, dateFrom, dateTo, categoriesChosen, personsChosen, display);
 
         $(document).ready(function() {
           $("select[name='categories_chosen']").multiselect();

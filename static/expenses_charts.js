@@ -1,4 +1,41 @@
-function drawCharts(aggregatedData, chartType, dateFrom, dateTo, categoriesSelected, personsSelected, display) {
+function updateChartParams(aggregatedData, categories, persons, chartObject) {
+    console.log(chartObject);
+
+    if ($("select[name=chart_type]")[0].value === '')
+        chartType = 'pie';
+    else
+        chartType = $("select[name=chart_type]")[0].value;
+
+    if ($("input[name=date_from]")[0].value === '')
+        dateFrom = 'None';
+    else
+        dateFrom = $("input[name=date_from]")[0].value;
+
+    if ($("input[name=date_to]")[0].value === '')
+        dateTo = 'None';
+    else
+        dateTo = ($("input[name=date_to]")[0].value === '');
+
+    if ($("select[name=categories_chosen]")[0].value === '')
+        categoriesChosen = categories;
+    else
+        categoriesChosen = $("select[name=categories_chosen]")[0].value;
+
+    if ($("select[name=display]")[0].value === '')
+        display = 'category';
+    else
+        display = $("select[name=display]")[0].value;
+
+    if ($("select[name=persons_chosen]")[0].value === '')
+        personsChosen = persons;
+    else
+        personsChosen = $("select[name=persons_chosen]")[0].value;
+
+    drawCharts(aggregatedData, chartType, dateFrom, dateTo, categoriesChosen, personsChosen, display, chartObject);
+
+}
+
+function drawCharts(aggregatedData, chartType, dateFrom, dateTo, categoriesSelected, personsSelected, display, chartObject) {
 
     if (dateFrom === "None") {
         dateFrom = moment(aggregatedData[0].date);
@@ -116,27 +153,31 @@ function drawCharts(aggregatedData, chartType, dateFrom, dateTo, categoriesSelec
         ]
     };
 
-    if (chartType == "pie") {
+    if (chartObject != null) {
+        chartObject.destroy();
+        console.log("destroyed");
+    }
 
+    if (chartType == "pie") {
         var dataChart = new Chart(canvas, {
                     type: 'pie',
                     data: chartData
                 });
 
     } else if (chartType == "line") {
-
         var dataChart = new Chart(canvas, {
             type: 'line',
             data: chartData
         });
 
     } else if (chartType == "bar") {
-
         var dataChart = new Chart(canvas, {
             type: 'bar',
             data: chartData
         });
     }
+
+    return dataChart;
 }
 
 function groupbyDate(period, row, amounts) {
