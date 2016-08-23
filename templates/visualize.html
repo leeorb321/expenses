@@ -94,7 +94,6 @@
         var categories = {{categories|tojson}};
         var persons = {{persons|tojson}};
 
-
         for (var i = 0; i < aggregatedData.length; i++) {
           aggregatedData[i].date = new Date(aggregatedData[i].date);
         }
@@ -102,7 +101,7 @@
         var mainChart = drawCharts(aggregatedData, "{{chartType}}", "{{dateFrom}}", "{{dateTo}}", {{categoriesSelected|tojson}}, {{personsSelected|tojson}}, "{{display}}");
 
         $("#submit-button").on("click", function() {
-          updateCharts(aggregatedData, categories, persons, mainChart);
+            updateCharts(aggregatedData, categories, persons, mainChart);
         });
 
         $(document).ready(function() {

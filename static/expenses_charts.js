@@ -49,11 +49,7 @@ function updateCharts(aggregatedData, categories, persons, chartObject) {
         }
     }
 
-    var newChart = drawCharts(aggregatedData, chartType, dateFrom, dateTo, categoriesChosen, personsChosen, display, chartObject);
-
-    $("#submit-button").on("click", function() {
-        updateCharts(aggregatedData, categories, persons, newChart);
-    });
+    drawCharts(aggregatedData, chartType, dateFrom, dateTo, categoriesChosen, personsChosen, display, chartObject);
 }
 
 function drawCharts(aggregatedData, chartType, dateFrom, dateTo, categoriesSelected, personsSelected, display, chartObject) {
@@ -171,22 +167,26 @@ function drawCharts(aggregatedData, chartType, dateFrom, dateTo, categoriesSelec
 
     if (chartObject != null) {
         chartObject.destroy();
+        var dataChart = chartObject;
+    }
+    else {
+        var dataChart;
     }
 
     if (chartType == "pie") {
-        var dataChart = new Chart(canvas, {
+        dataChart = new Chart(canvas, {
                     type: 'pie',
                     data: chartData
                 });
 
     } else if (chartType == "line") {
-        var dataChart = new Chart(canvas, {
+        dataChart = new Chart(canvas, {
             type: 'line',
             data: chartData
         });
 
     } else if (chartType == "bar") {
-        var dataChart = new Chart(canvas, {
+        dataChart = new Chart(canvas, {
             type: 'bar',
             data: chartData
         });
