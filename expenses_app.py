@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, make_response
 from os import system
 from datetime import datetime
 from db import *
@@ -46,12 +46,9 @@ def update_entry():
     new_description = request.form['description']
     txn_id = request.form['txn_id']
 
-    print("TEST")
-    print("HERE:",new_person, new_date, new_category, new_amount, new_description,txn_id)
-
     update_expense(new_person, new_date, new_amount, new_category, new_description, txn_id)
 
-    return redirect('/retrieve_data')
+    return make_response()
 
 @app.route('/retrieve_data', methods=['GET'])
 def retrieve_data():

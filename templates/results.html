@@ -20,7 +20,7 @@
       </thead>
       <tbody>
         {% for row in data %}
-          <tr id="{{row['id']}}">
+          <tr id="row{{row['id']}}">
             <td>
             <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#modify_modal">Edit</button></td>
             <td id="date">{{ row['date'] }}</td>
@@ -61,11 +61,11 @@
                     <option value='{{ person }}'>{{ person.capitalize() }}</option>
                 {% endfor %}
               </select>
-              <input type='submit' value='Submit' />
+              <input type='submit' id="submit-form" value='Submit' />
             </form>
         </div>
         <div class="modal-footer">
-          <button type="button" id="submit_form" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
         </div>
       </div>
     </div>
@@ -78,6 +78,10 @@
         return string.charAt(0).toLowerCase() + string.slice(1);
     }
 
+    function upperCaseFirstLetter(string) {
+        return string.charAt(0).toUpperCase() + string.slice(1);
+    }
+
     $(document).ready(function(){
 
       $('#datatable').DataTable( {
@@ -88,6 +92,7 @@
 
       $('#datatable tbody tr').click(function(){
         var id = $(this).attr("id");
+        id = id.replace("row", "");
         var date_content = $(this).children("td#date").text();
         var amt_content = $(this).children("td#amount").text();
         var cat_content = $(this).children("td#category").text();
@@ -102,16 +107,44 @@
         $("select[name='person']").val(lowerCaseFirstLetter(person_content));
       });
 
-      $('#submit_form').click(function(){
+      $('#submit-form').click(function(e) {
+        var id = $("input[name='txn_id']").val();
+
+        var types = ["date", "amount", "category", "description", "person"];
+
+        for (var i = 0; i < types.length; i++) {
+          var tableSelector = "#datatable tbody tr#row" + id + " td#" + types[i];
+
+          if (types[i] === "person" || types[i] === "category") {
+            var formSelector = "select[name='" + types[i] + "']";
+          }
+          else {
+            var formSelector = "input[name='" + types[i] + "']";
+          }
+
+          var tableValue = $(tableSelector).text();
+          var formValue = $(formSelector).val();
+          if (types[i] === "person" || types[i] === "category") {
+            formValue = upperCaseFirstLetter(formValue);
+          }
+     
+          if (tableValue !== formValue) {
+            $(tableSelector).text(formValue);
+          }
+        }
+
+        e.preventDefault();
         $.ajax({
             type: "POST",
             url: "/update_entry",
             data: $("#modify_form").serialize(),
             success: function(response) {
                 console.log(response);
+                $("#modify_modal").modal('hide');
             },
             error: function(error) {
                 console.log(error);
+                $("#modify_modal").modal('hide');
             }
         });
       });
