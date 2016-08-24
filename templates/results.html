@@ -10,7 +10,7 @@
     <table id="datatable" align="center" class="table table-striped">
       <thead>
         <tr>
-          <th id="edit">Edit</th>
+          <th id="edit">Edit/Delete</th>
           <th id="date">Transaction Date</th>
           <th id="amount">Amount</th>
           <th id="category">Category</th>
@@ -22,7 +22,7 @@
         {% for row in data %}
           <tr id="row{{row['id']}}">
             <td>
-            <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#modify_modal">Edit</button></td>
+            <button type="button" data-toggle="modal" data-target="#modify_modal">Edit/Delete</button></td>
             <td id="date">{{ row['date'] }}</td>
             <td id="amount">{{ "${:.2f}".format(row['amount']|float) }}</td>
             <td id="category">{{ row['category'] }}</td>
