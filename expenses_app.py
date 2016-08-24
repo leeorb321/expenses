@@ -50,6 +50,14 @@ def update_entry():
 
     return make_response()
 
+@app.route('/delete_entry', methods=['DELETE'])
+def delete_entry():
+    txn_id = request.form['txn_id']
+
+    delete_expense(txn_id)
+
+    return make_response()
+
 @app.route('/retrieve_data', methods=['GET'])
 def retrieve_data():
     persons, categories = connect()

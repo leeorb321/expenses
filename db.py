@@ -89,6 +89,18 @@ def update_expense(new_person, new_date, new_amount, new_category, new_descripti
         print('Error %s' % e)
         sys.exit(1)
 
+def delete_expense(txn_id):
+    try:
+        conn = psycopg2.connect(database="expenses")
+        cur = conn.cursor()
+        cur.execute('''DELETE FROM ledger WHERE id = '%s';''' % txn_id)
+
+        conn.commit()
+        conn.close()
+    except psycopg2.DatabaseError as e:
+        print('Error %s' % e)
+        sys.exit(1)
+
 def display_all_data():
     conn = check_heroku_db()
     cur = conn.cursor()

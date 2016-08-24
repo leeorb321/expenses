@@ -63,7 +63,7 @@
               </select>
               <input type='submit' id="submit-form" value='Submit' />
             </form>
-
+            <button id="delete">Delete</button>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -107,6 +107,31 @@
         $("input[name='description']").val(desc_content);
         $("select[name='person']").val(lowerCaseFirstLetter(person_content));
       });
+
+      $('#delete').click(function(e) {
+
+        var check = confirm("Are you sure you want to delete this entry?");
+
+        if (check) {
+          $.ajax({
+            type: "DELETE",
+            url: "/delete_entry",
+            data: $("input[name='txn_id']").serialize(),
+            success: function(response) {
+              var tableSelector = "#datatable tbody tr#row" + $("input[name='txn_id']").val();
+              $(tableSelector).remove();
+
+              $("#modify_modal").modal('hide');
+            },
+            error: function(error) {
+                console.log(error);
+
+                $("#modify_modal").modal('hide');
+            }
+          });
+        }
+      });
+
 
       $('#submit-form').click(function(e) {
 
