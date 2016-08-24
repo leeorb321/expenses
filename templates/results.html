@@ -63,6 +63,7 @@
               </select>
               <input type='submit' id="submit-form" value='Submit' />
             </form>
+
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -108,30 +109,6 @@
       });
 
       $('#submit-form').click(function(e) {
-        var id = $("input[name='txn_id']").val();
-
-        var types = ["date", "amount", "category", "description", "person"];
-
-        for (var i = 0; i < types.length; i++) {
-          var tableSelector = "#datatable tbody tr#row" + id + " td#" + types[i];
-
-          if (types[i] === "person" || types[i] === "category") {
-            var formSelector = "select[name='" + types[i] + "']";
-          }
-          else {
-            var formSelector = "input[name='" + types[i] + "']";
-          }
-
-          var tableValue = $(tableSelector).text();
-          var formValue = $(formSelector).val();
-          if (types[i] === "person" || types[i] === "category") {
-            formValue = upperCaseFirstLetter(formValue);
-          }
-     
-          if (tableValue !== formValue) {
-            $(tableSelector).text(formValue);
-          }
-        }
 
         e.preventDefault();
         $.ajax({
@@ -139,7 +116,32 @@
             url: "/update_entry",
             data: $("#modify_form").serialize(),
             success: function(response) {
-                console.log(response);
+
+                var id = $("input[name='txn_id']").val();
+
+                var types = ["date", "amount", "category", "description", "person"];
+
+                for (var i = 0; i < types.length; i++) {
+                  var tableSelector = "#datatable tbody tr#row" + id + " td#" + types[i];
+
+                  if (types[i] === "person" || types[i] === "category") {
+                    var formSelector = "select[name='" + types[i] + "']";
+                  }
+                  else {
+                    var formSelector = "input[name='" + types[i] + "']";
+                  }
+
+                  var tableValue = $(tableSelector).text();
+                  var formValue = $(formSelector).val();
+                  if (types[i] === "person" || types[i] === "category") {
+                    formValue = upperCaseFirstLetter(formValue);
+                  }
+
+                  if (tableValue !== formValue) {
+                    $(tableSelector).text(formValue);
+                  }
+                }
+
                 $("#modify_modal").modal('hide');
             },
             error: function(error) {
