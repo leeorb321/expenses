@@ -1,7 +1,10 @@
 from os import system
 import psycopg2
 
-system('psql -U postgres postgres -f create_db.sql')
+instance = input("Enter the name of your postgres instance: ")
+user = input("Enter the name of your postgres superuser: ")
+
+system('psql -U' + user + ' ' + instance + ' -f create_db.sql')
 
 persons = input("Enter all users of the Expenses Tracker, separated by commas: ")
 persons = persons.split(',')
