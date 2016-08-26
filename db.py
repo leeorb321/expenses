@@ -48,10 +48,13 @@ def new_expense(person, expense_date, amount, category, description):
     try:
         conn = check_heroku_db()
         cur = conn.cursor()
-        cur.execute('''INSERT INTO ledger (person_id, txn_date, amount, category_id, description)
-                        SELECT (SELECT id FROM persons WHERE person_name='%s'), '%s', %d,
-                        (SELECT id FROM categories WHERE cat_name='%s'), '%s' ;'''
-                        % (person, expense_date, amount, category, description))
+
+        query = '''INSERT INTO ledger (person_id, txn_date, amount, category_id, description)
+                        SELECT (SELECT id FROM persons WHERE person_name=%s), %s, %s,
+                        (SELECT id FROM categories WHERE cat_name=%s), %s ;'''
+        data = (person, expense_date, amount, category, description, )
+        cur.execute(query, data)
+
         conn.commit()
         conn.close()
 
@@ -63,7 +66,11 @@ def new_category(category_name):
     try:
         conn = check_heroku_db()
         cur = conn.cursor()
-        cur.execute('''INSERT INTO categories (cat_name) VALUES (%s)''', (category_name,))
+
+        query = "INSERT INTO categories (cat_name) VALUES (%s);"
+        data = (category_name,)
+        cur.execute(query, data)
+
         conn.commit()
         conn.close()
 
@@ -75,14 +82,18 @@ def update_expense(new_person, new_date, new_amount, new_category, new_descripti
     try:
         conn = psycopg2.connect(database="expenses")
         cur = conn.cursor()
-        cur.execute('''UPDATE ledger SET
-                        person_id = (SELECT id FROM persons WHERE person_name = '%s'),
-                        txn_date = '%s',
-                        amount = '%s',
-                        category_id = (SELECT id FROM categories WHERE cat_name = '%s'),
-                        description = '%s'
-                        WHERE id = '%s';
-                    ''' % (new_person, new_date, new_amount, new_category, new_description, txn_id))
+
+        query = '''UPDATE ledger SET
+                        person_id = (SELECT id FROM persons WHERE person_name = %s),
+                        txn_date = %s,
+                        amount = %s,
+                        category_id = (SELECT id FROM categories WHERE cat_name = %s),
+                        description = %s
+                        WHERE id = %s;
+                    '''
+        data = (new_person, new_date, new_amount, new_category, new_description, txn_id, )
+        cur.execute(query, data)
+
         conn.commit()
         conn.close()
     except psycopg2.DatabaseError as e:
@@ -93,7 +104,10 @@ def delete_expense(txn_id):
     try:
         conn = psycopg2.connect(database="expenses")
         cur = conn.cursor()
-        cur.execute('''DELETE FROM ledger WHERE id = '%s';''' % txn_id)
+
+        query = "DELETE FROM ledger WHERE id = %s;"
+        data = (txn_id, )
+        cur.execute(query, data)
 
         conn.commit()
         conn.close()
