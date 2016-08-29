@@ -120,11 +120,19 @@ function drawCharts(aggregatedData, chartType, dateFrom, dateTo, categoriesSelec
 
     for (i = 0; i < aggregatedData.length; i++) {
 
+        console.log(dateFrom);
+        console.log(dateTo);
+
         var checkDateFrom = moment(aggregatedData[i].date).isSameOrAfter(dateFrom);
         var checkDateTo = moment(aggregatedData[i].date).isSameOrBefore(dateTo);
         var checkPersons = personsSelected.indexOf(aggregatedData[i].person.toLowerCase()) > -1;
         var checkCategories = categoriesSelected.indexOf(aggregatedData[i].category.toLowerCase()) > -1;
         var dateGroups = ["year", "month", "week", "day"];
+
+        console.log('checkDateFrom', checkDateFrom);
+        console.log('checkDateTo', checkDateTo);
+        console.log('checkPersons', checkPersons);
+        console.log('checkCategories', checkCategories);
 
         if (checkDateFrom && checkDateTo && checkCategories && checkPersons) {
 
@@ -140,12 +148,23 @@ function drawCharts(aggregatedData, chartType, dateFrom, dateTo, categoriesSelec
         }
     }
 
+    var total,
+        newBins = [];
     for (i = 0; i < displayBins.length; i++) {
-      amounts[displayBins[i]] = parseFloat(Math.round(amounts[displayBins[i]] * 100) / 100).toFixed(2);
+        total = parseFloat(Math.round(amounts[displayBins[i]] * 100) / 100).toFixed(2);
+        console.log(total);
+        if (total !== '0.00') {
+            amounts[displayBins[i]] = total;
+            newBins.push(displayBins[i]);
+        }
+        else {
+            delete amounts[displayBins[i]];
+        }
     }
+    displayBins = newBins;
 
-    var chartLabels = Object.keys(displayBins).map(function(k) {
-        return displayBins[k].charAt(0).toUpperCase() + displayBins[k].slice(1);
+    var chartLabels = Object.keys(amounts).map(function(k) {
+        return k.charAt(0).toUpperCase() + k.slice(1);
     });
 
     var amountsData = [];

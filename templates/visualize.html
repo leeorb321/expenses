@@ -8,6 +8,15 @@
   <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/css/bootstrap-multiselect.css" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/js/bootstrap-multiselect.min.js"></script>
 
+  <script type="text/javascript">
+    function reloadStylesheets() {
+      var queryString = '?reload=' + new Date().getTime();
+      $('link[rel="stylesheet"]').each(function () {
+          this.href = this.href.replace(/\?.*|$/, queryString);
+      });
+    }
+  </script>
+
   <div class="page">
   <h1>Visualize Data</h1>
 
@@ -125,38 +134,36 @@
             return string.charAt(0).toUpperCase() + string.slice(1);
         }
 
-        $("#more_data_button").on("click", function() {
-          // APPEND HTML
-          var last_row_selector = $(".filter_row").last();
-          var new_row_id = parseInt(last_row_selector.attr("id").replace("row", ""));
-          new_row_id++;
+        // $("#more_data_button").on("click", function() {
+        //   // APPEND HTML
+        //   var last_row_selector = $(".filter_row").last();
+        //   var new_row_id = parseInt(last_row_selector.attr("id").replace("row", ""));
+        //   new_row_id++;
 
-          var categories_str = "";
-          for (var i = 0; i < categories.length; i++) {
-            categories_str += "<option value=" + categories[i] + ">" + upperCaseFirstLetter(categories[i]) + "</option>";
-          }
+        //   var categories_str = "";
+        //   for (var i = 0; i < categories.length; i++) {
+        //     categories_str += "<option value=" + categories[i] + ">" + upperCaseFirstLetter(categories[i]) + "</option>";
+        //   }
 
-          var persons_str = "";
-          for (var i = 0; i < persons.length; i++) {
-            persons_str += "<option value=" + persons[i] + ">" + upperCaseFirstLetter(persons[i]) + "</option>";
-          }
+        //   var persons_str = "";
+        //   for (var i = 0; i < persons.length; i++) {
+        //     persons_str += "<option value=" + persons[i] + ">" + upperCaseFirstLetter(persons[i]) + "</option>";
+        //   }
 
-          $("#filter_rows").append(
-
-
-          '<div class="row filter_row" id="row'+new_row_id+'"><div class="col-md-1">' +
-          '<br><br><p><button id="more_data_button">+</button></p></div>' +
-          '<div class="col-md-5"><label>Categories:</label><br><select name="categories_chosen" multiple>' +
-          categories_str + '</select></div><div class="col-md-6"><label>Persons:</label><br>' +
-          '<select name="persons_chosen" multiple>' + persons_str + '</select></div></div>'
-
-          );
+        //   $("#filter_rows").append(
 
 
+        //   '<div class="row filter_row" id="row'+new_row_id+'"><div class="col-md-1">' +
+        //   '<br><br><p><button id="more_data_button">+</button></p></div>' +
+        //   '<div class="col-md-5"><label>Categories:</label><br><select name="categories_chosen" multiple>' +
+        //   categories_str + '</select></div><div class="col-md-6"><label>Persons:</label><br>' +
+        //   '<select name="persons_chosen" multiple>' + persons_str + '</select></div></div>'
 
-          // REMOVE LAST + BUTTON AFTER ADDING ROW
+        //   );
 
-        });
+        //   // REMOVE LAST + BUTTON AFTER ADDING ROW
+
+        // });
 
     </script>
 

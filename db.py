@@ -6,6 +6,7 @@ import os
 
 def check_heroku_db():
     if 'DATABASE_URL' in os.environ and os.environ['DATABASE_URL']:
+        print ('Heroku DB.')
         urllib.parse.uses_netloc.append("postgres")
         url = urllib.parse.urlparse(os.environ["DATABASE_URL"])
 
@@ -18,6 +19,7 @@ def check_heroku_db():
         )
         return conn
     else:
+        print ('Non-heroku db')
         conn = psycopg2.connect(database="expenses")
         return conn
 
