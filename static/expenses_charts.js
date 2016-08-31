@@ -197,24 +197,6 @@ function drawCharts(aggregatedData, chartType, dateFrom, dateTo, categoriesSelec
         }
     }
 
-    // var total,
-    //     newBins = [];
-    // for (i = 0; i < displayBins.length; i++) {
-    //     total = parseFloat(Math.round(amounts[displayBins[i]] * 100) / 100).toFixed(2);
-    //     if (total !== '0.00') {
-    //         amounts[displayBins[i]] = total;
-    //         newBins.push(displayBins[i]);
-    //     }
-    //     else {
-    //         delete amounts[displayBins[i]];
-    //     }
-    // }
-    // displayBins = newBins;
-
-    // var chartLabels = Object.keys(displayBins).map(function(k) {
-    //     return k.charAt(0).toUpperCase() + k.slice(1);
-    // });
-
     var chartLabels = displayBins.map(function(element) {
         return element.charAt(0).toUpperCase() + element.slice(1);
     });
@@ -258,33 +240,29 @@ function drawCharts(aggregatedData, chartType, dateFrom, dateTo, categoriesSelec
         labels: chartLabels,
         datasets: datasets
     };
-
-    if (chartObject != null) {
-        chartObject.destroy();
+ 
+    if (chartObject.length > 0) {
+        chartObject[0].destroy();
         canvas.clearRect(0, 0, canvas.width, canvas.height);
+        chartObject = [];
     }
-    let dataChart;
 
     if (chartType == "pie") {
-        dataChart = new Chart(canvas, {
+        chartObject.push(new Chart(canvas, {
                     type: 'pie',
                     data: chartData
-                });
-
+                }));
     } else if (chartType == "line") {
-        dataChart = new Chart(canvas, {
+        chartObject.push(new Chart(canvas, {
             type: 'line',
             data: chartData
-        });
-
+        }));
     } else if (chartType == "bar") {
-        dataChart = new Chart(canvas, {
+        chartObject.push(new Chart(canvas, {
             type: 'bar',
             data: chartData
-        });
+        }));
     }
-
-    return dataChart;
 }
 
 function groupbyDate(period, row, amounts) {

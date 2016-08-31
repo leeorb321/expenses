@@ -312,7 +312,8 @@
           aggregatedData[i].date = new Date(aggregatedData[i].date);
         }
 
-        let mainChart = drawCharts(aggregatedData, "{{chartType}}", ["{{dateFrom}}"], ["{{dateTo}}"], [{{categoriesSelected|tojson}}], [{{personsSelected|tojson}}], "{{display}}");
+        var mainChart = [];
+        mainChart.push(drawCharts(aggregatedData, "{{chartType}}", ["{{dateFrom}}"], ["{{dateTo}}"], [{{categoriesSelected|tojson}}], [{{personsSelected|tojson}}], "{{display}}", mainChart));
 
         $("#submit-button").on("click", function() {
             updateCharts(aggregatedData, categories, persons, mainChart);
