@@ -14,10 +14,6 @@ function mutateRGB(seed, minimum, maximum) {
     if (generated >= 0) {
         var corrected = Math.max(minimum, generated)
     }
-    console.log("seed: ", seed);
-    console.log("minimum: ", minimum);
-    console.log("corrected: ", corrected);
-    console.log("result: ", corrected + seed)
     
     return parseInt(Math.max(0, Math.min(255, corrected + seed)));
 }
@@ -229,7 +225,9 @@ function drawCharts(aggregatedData, chartType, dateFrom, dateTo, categoriesSelec
         }
     }
 
-    var datasets = [];
+    var datasets = [],
+        colorMin = 15,
+        colorMax = 40;
     if (chartType === "line") {
         for (var i = 0; i < amounts.length; i++) {
             var randRed = randRGB();
@@ -237,7 +235,7 @@ function drawCharts(aggregatedData, chartType, dateFrom, dateTo, categoriesSelec
             var randBlue = randRGB();
             var chartColors = [];
             for (var j = 0; j < displayBins.length; j++) {
-                chartColors.push("rgba(" + mutateRGB(randRed, 15, 50) + ", " + mutateRGB(randGreen, 15, 50) + ", " + mutateRGB(randBlue, 15, 50) + ", 1)");
+                chartColors.push("rgba(" + mutateRGB(randRed, colorMin, colorMax) + ", " + mutateRGB(randGreen, colorMin, colorMax) + ", " + mutateRGB(randBlue, colorMin, colorMax) + ", 1)");
             }
             datasets.push({
                 label: "Filter " + (i + 1),
@@ -254,7 +252,7 @@ function drawCharts(aggregatedData, chartType, dateFrom, dateTo, categoriesSelec
             var randBlue = randRGB();
             var chartColors = [];
             for (var j = 0; j < displayBins.length; j++) {
-                chartColors.push("rgba(" + mutateRGB(randRed, 15, 50) + ", " + mutateRGB(randGreen, 15, 50) + ", " + mutateRGB(randBlue, 15, 50) + ", 1)");
+                chartColors.push("rgba(" + mutateRGB(randRed, colorMin, colorMax) + ", " + mutateRGB(randGreen, colorMin, colorMax) + ", " + mutateRGB(randBlue, colorMin, colorMax) + ", 1)");
             }
             datasets.push({
                 label: "Filter " + (i + 1),
@@ -272,7 +270,7 @@ function drawCharts(aggregatedData, chartType, dateFrom, dateTo, categoriesSelec
             var randGreen = randRGB();
             var randBlue = randRGB();
             for (var i = 0; i < amounts.length; i++) {
-                chartColors[j].push("rgba(" + mutateRGB(randRed, 15, 50) + ", " + mutateRGB(randGreen, 15, 50) + ", " + mutateRGB(randBlue, 15, 50) + ", 1)");
+                chartColors[j].push("rgba(" + mutateRGB(randRed, colorMin, colorMax) + ", " + mutateRGB(randGreen, colorMin, colorMax) + ", " + mutateRGB(randBlue, colorMin, colorMax) + ", 1)");
             }
         }
         for (var i = 0; i < amounts.length; i++) {
@@ -296,17 +294,15 @@ function drawCharts(aggregatedData, chartType, dateFrom, dateTo, categoriesSelec
     if (chartObject.length > 0) {
         chartObject[0].destroy();
         canvas.clearRect(0, 0, canvas.width, canvas.height);
-        chartObject = [];
+        while (chartObject.length > 0) {
+            chartObject.pop();
+        }
     }
-
-    console.log(datasets);
 
     chartObject.push(new Chart(canvas, {
         type: chartType,
         data: chartData
     }));
-
-    console.log("after draw: ", chartObject);
 }
 
 function groupbyDate(period, row, amounts) {

@@ -53,8 +53,7 @@
         <div id="filters-1">
           <h3>Filter 1</h3>
           <div class="row">
-
-            <div class="col-md-5 col-md-offset-1">
+            <div class="col-md-6">
               <label>Start Date:</label>
               <input type="date" name="date_from_1" class="form-control">
             </div>
@@ -67,15 +66,7 @@
           </div>
           <br>
           <div class="row">
-
-            <div class="col-md-1">
-              <br><br>
-              <p>
-              <button id="more-data-1">+</button>
-              </p>
-            </div>
-
-            <div class="col-md-5">
+            <div class="col-md-6">
               <label>Categories:</label><br>
               <select name="categories_chosen_1" multiple>
                 {% for category in categories%}
@@ -92,7 +83,11 @@
                 {% endfor %}
               </select>
             </div>
-
+            <div class="row">
+              <div class="col-md-1">
+                <button class="btn btn-primary" id="more-data-1">+</button>
+              </div>
+            </div>
           </div> 
           <hr>   
           </div>
@@ -313,7 +308,7 @@
         }
 
         var mainChart = [];
-        mainChart.push(drawCharts(aggregatedData, "{{chartType}}", ["{{dateFrom}}"], ["{{dateTo}}"], [{{categoriesSelected|tojson}}], [{{personsSelected|tojson}}], "{{display}}", mainChart));
+        drawCharts(aggregatedData, "{{chartType}}", ["{{dateFrom}}"], ["{{dateTo}}"], [{{categoriesSelected|tojson}}], [{{personsSelected|tojson}}], "{{display}}", mainChart);
 
         $("#submit-button").on("click", function() {
             updateCharts(aggregatedData, categories, persons, mainChart);
