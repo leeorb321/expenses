@@ -2,6 +2,26 @@ function randRGB() {
     return Math.floor(Math.random() * (255 + 1));
 }
 
+function mutateRGB(seed, minimum, maximum) {
+    var generated = Math.floor((Math.random() * maximum));
+    if (generated > (maximum / 2)) {
+        generated -= maximum / 2;
+        generated = -(generated);
+    }
+    if (generated < 0) {
+        var corrected = Math.min(-minimum, generated);
+    }
+    if (generated >= 0) {
+        var corrected = Math.max(minimum, generated)
+    }
+    console.log("seed: ", seed);
+    console.log("minimum: ", minimum);
+    console.log("corrected: ", corrected);
+    console.log("result: ", corrected + seed)
+    
+    return parseInt(Math.max(0, Math.min(255, corrected + seed)));
+}
+
 function updateCharts(aggregatedData, categories, persons, chartObject) {
     var chartSelector = $("select[name=chart_type]")[0];
     if (chartSelector.value === '')
@@ -210,27 +230,59 @@ function drawCharts(aggregatedData, chartType, dateFrom, dateTo, categoriesSelec
     }
 
     var datasets = [];
-    if (amounts.length === 1) {
-        var chartColors = [];
-            for (var i = 0; i < displayBins.length; i++) {
-                chartColors.push("rgba(" + randRGB() + ", " + randRGB() + ", " + randRGB() + ", 1)");
-            }
-        datasets.push({
-            label: "Filter 1",
-            backgroundColor: chartColors,
-            borderColor: chartColors,
-            data: amountsData[0],
-            fill: false,
-        });
-    }
-    else {
+    if (chartType === "line") {
         for (var i = 0; i < amounts.length; i++) {
-            var genColor = "rgba(" + randRGB() + ", " + randRGB() + ", " + randRGB() + ", 1)";
+            var randRed = randRGB();
+            var randGreen = randRGB();
+            var randBlue = randRGB();
+            var chartColors = [];
+            for (var j = 0; j < displayBins.length; j++) {
+                chartColors.push("rgba(" + mutateRGB(randRed, 15, 50) + ", " + mutateRGB(randGreen, 15, 50) + ", " + mutateRGB(randBlue, 15, 50) + ", 1)");
+            }
             datasets.push({
                 label: "Filter " + (i + 1),
                 fill: false,
-                backgroundColor: genColor,
-                borderColor: genColor,
+                borderColor: chartColors,
+                data: amountsData[i],
+            });
+        }
+    }
+     if (chartType === "bar") {
+        for (var i = 0; i < amounts.length; i++) {
+            var randRed = randRGB();
+            var randGreen = randRGB();
+            var randBlue = randRGB();
+            var chartColors = [];
+            for (var j = 0; j < displayBins.length; j++) {
+                chartColors.push("rgba(" + mutateRGB(randRed, 15, 50) + ", " + mutateRGB(randGreen, 15, 50) + ", " + mutateRGB(randBlue, 15, 50) + ", 1)");
+            }
+            datasets.push({
+                label: "Filter " + (i + 1),
+                backgroundColor: chartColors,
+                data: amountsData[i],
+            });
+        }
+    }
+
+    if (chartType === "pie") {
+        var chartColors = [];
+        for (var j = 0; j < displayBins.length; j++) {
+            chartColors.push([]);
+            var randRed = randRGB();
+            var randGreen = randRGB();
+            var randBlue = randRGB();
+            for (var i = 0; i < amounts.length; i++) {
+                chartColors[j].push("rgba(" + mutateRGB(randRed, 15, 50) + ", " + mutateRGB(randGreen, 15, 50) + ", " + mutateRGB(randBlue, 15, 50) + ", 1)");
+            }
+        }
+        for (var i = 0; i < amounts.length; i++) {
+            var tempColors = [];
+            for (var j = 0; j < displayBins.length; j++) {
+                tempColors.push(chartColors[j][i])
+            }
+            datasets.push({
+                label: "Filter " + (i + 1),
+                backgroundColor: tempColors,
                 data: amountsData[i],
             });
         }
@@ -247,22 +299,14 @@ function drawCharts(aggregatedData, chartType, dateFrom, dateTo, categoriesSelec
         chartObject = [];
     }
 
-    if (chartType == "pie") {
-        chartObject.push(new Chart(canvas, {
-                    type: 'pie',
-                    data: chartData
-                }));
-    } else if (chartType == "line") {
-        chartObject.push(new Chart(canvas, {
-            type: 'line',
-            data: chartData
-        }));
-    } else if (chartType == "bar") {
-        chartObject.push(new Chart(canvas, {
-            type: 'bar',
-            data: chartData
-        }));
-    }
+    console.log(datasets);
+
+    chartObject.push(new Chart(canvas, {
+        type: chartType,
+        data: chartData
+    }));
+
+    console.log("after draw: ", chartObject);
 }
 
 function groupbyDate(period, row, amounts) {
