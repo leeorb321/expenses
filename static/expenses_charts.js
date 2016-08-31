@@ -21,14 +21,45 @@ function updateCharts(aggregatedData, categories, persons, chartObject) {
     else
         dateTo = (dateToSelector.value === '');
 
-    var categorySelector = $("select[name=categories_chosen]")[0];
-    if (categorySelector.value === '')
-        categoriesChosen = categories;
-    else {
-        categoriesChosen = [];
-        for (var i = 0; i < categorySelector.options.length; i++) {
-            if (categorySelector.options[i].selected)
-                categoriesChosen.push(categorySelector.options[i].value);
+    var categoriesChosen = [];
+
+    for (var i = 0; i < 5; i++) {
+        var selectorString = "select[name=categories_chosen_" + (i + 1) + "]";
+        if ( $("#row" + (i + 1)).is(":hidden") ) {
+            categoriesChosen.push([]);
+        }
+        else {
+            var categorySelector = $(selectorString)[0];
+            if (categorySelector.value === '')
+                categoriesChosen.push(categories);
+            else {
+                categoriesChosen.push([]);
+                for (var j = 0; j < categorySelector.options.length; j++) {
+                    if (categorySelector.options[j].selected)
+                        categoriesChosen[i].push(categorySelector.options[j].value);
+                }
+            }
+        }
+    }
+
+    var personsChosen = [];
+
+    for (var i = 0; i < 5; i++) {
+        var selectorString = "select[name=persons_chosen_" + (i + 1) + "]";
+        if ( $("#row" + (i + 1)).is(":hidden") ) {
+            personsChosen.push([]);
+        }
+        else {
+            var personsSelector = $(selectorString)[0];
+            if (personsSelector.value === '')
+                personsChosen.push(persons);
+            else {
+                personsChosen.push([]);
+                for (var j = 0; j < personsSelector.options.length; j++) {
+                    if (personsSelector.options[j].selected)
+                        personsChosen[i].push(personsSelector.options[j].value);
+                }
+            }
         }
     }
 
@@ -38,18 +69,7 @@ function updateCharts(aggregatedData, categories, persons, chartObject) {
     else
         display = displaySelector.value;
 
-    var personsSelector = $("select[name=persons_chosen]")[0];
-    if (personsSelector.value === '')
-        personsChosen = persons;
-    else {
-        personsChosen = [];
-        for (var i = 0; i < personsSelector.options.length; i++) {
-            if (personsSelector.options[i].selected)
-                personsChosen.push(personsSelector.options[i].value);
-        }
-    }
-
-    drawCharts(aggregatedData, chartType, dateFrom, dateTo, categoriesChosen, personsChosen, display, chartObject);
+    drawCharts(aggregatedData, chartType, dateFrom, dateTo, categoriesChosen[0], personsChosen[0], display, chartObject);
 }
 
 function drawCharts(aggregatedData, chartType, dateFrom, dateTo, categoriesSelected, personsSelected, display, chartObject) {
@@ -120,19 +140,11 @@ function drawCharts(aggregatedData, chartType, dateFrom, dateTo, categoriesSelec
 
     for (i = 0; i < aggregatedData.length; i++) {
 
-        console.log(dateFrom);
-        console.log(dateTo);
-
         var checkDateFrom = moment(aggregatedData[i].date).isSameOrAfter(dateFrom);
         var checkDateTo = moment(aggregatedData[i].date).isSameOrBefore(dateTo);
         var checkPersons = personsSelected.indexOf(aggregatedData[i].person.toLowerCase()) > -1;
         var checkCategories = categoriesSelected.indexOf(aggregatedData[i].category.toLowerCase()) > -1;
         var dateGroups = ["year", "month", "week", "day"];
-
-        console.log('checkDateFrom', checkDateFrom);
-        console.log('checkDateTo', checkDateTo);
-        console.log('checkPersons', checkPersons);
-        console.log('checkCategories', checkCategories);
 
         if (checkDateFrom && checkDateTo && checkCategories && checkPersons) {
 
@@ -152,7 +164,6 @@ function drawCharts(aggregatedData, chartType, dateFrom, dateTo, categoriesSelec
         newBins = [];
     for (i = 0; i < displayBins.length; i++) {
         total = parseFloat(Math.round(amounts[displayBins[i]] * 100) / 100).toFixed(2);
-        console.log(total);
         if (total !== '0.00') {
             amounts[displayBins[i]] = total;
             newBins.push(displayBins[i]);

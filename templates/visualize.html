@@ -76,7 +76,7 @@
 
             <div class="col-md-5">
               <label>Categories:</label><br>
-              <select name="categories_chosen" multiple>
+              <select name="categories_chosen_1" multiple>
                 {% for category in categories%}
                   <option value="{{ category }}">{{ category.capitalize() }}</option>
                 {% endfor %}
@@ -85,7 +85,7 @@
 
             <div class="col-md-6">
               <label>Persons:</label><br>
-              <select name="persons_chosen" multiple>
+              <select name="persons_chosen_1" multiple>
                 {% for person in persons%}
                   <option value="{{ person }}">{{ person.capitalize() }}</option>
                 {% endfor %}
@@ -105,7 +105,7 @@
 
             <div class="col-md-5">
               <label>Categories:</label><br>
-              <select name="categories_chosen" multiple>
+              <select name="categories_chosen_2" multiple>
                 {% for category in categories%}
                   <option value="{{ category }}">{{ category.capitalize() }}</option>
                 {% endfor %}
@@ -114,7 +114,7 @@
 
             <div class="col-md-6">
               <label>Persons:</label><br>
-              <select name="persons_chosen" multiple>
+              <select name="persons_chosen_2" multiple>
                 {% for person in persons%}
                   <option value="{{ person }}">{{ person.capitalize() }}</option>
                 {% endfor %}
@@ -134,7 +134,7 @@
 
             <div class="col-md-5">
               <label>Categories:</label><br>
-              <select name="categories_chosen" multiple>
+              <select name="categories_chosen_3" multiple>
                 {% for category in categories%}
                   <option value="{{ category }}">{{ category.capitalize() }}</option>
                 {% endfor %}
@@ -143,7 +143,7 @@
 
             <div class="col-md-6">
               <label>Persons:</label><br>
-              <select name="persons_chosen" multiple>
+              <select name="persons_chosen_3" multiple>
                 {% for person in persons%}
                   <option value="{{ person }}">{{ person.capitalize() }}</option>
                 {% endfor %}
@@ -163,7 +163,7 @@
 
             <div class="col-md-5">
               <label>Categories:</label><br>
-              <select name="categories_chosen" multiple>
+              <select name="categories_chosen_4" multiple>
                 {% for category in categories%}
                   <option value="{{ category }}">{{ category.capitalize() }}</option>
                 {% endfor %}
@@ -172,7 +172,7 @@
 
             <div class="col-md-6">
               <label>Persons:</label><br>
-              <select name="persons_chosen" multiple>
+              <select name="persons_chosen_4" multiple>
                 {% for person in persons%}
                   <option value="{{ person }}">{{ person.capitalize() }}</option>
                 {% endfor %}
@@ -191,7 +191,7 @@
 
             <div class="col-md-5">
               <label>Categories:</label><br>
-              <select name="categories_chosen" multiple>
+              <select name="categories_chosen_5" multiple>
                 {% for category in categories%}
                   <option value="{{ category }}">{{ category.capitalize() }}</option>
                 {% endfor %}
@@ -200,7 +200,7 @@
 
             <div class="col-md-6">
               <label>Persons:</label><br>
-              <select name="persons_chosen" multiple>
+              <select name="persons_chosen_5" multiple>
                 {% for person in persons%}
                   <option value="{{ person }}">{{ person.capitalize() }}</option>
                 {% endfor %}
@@ -286,46 +286,23 @@
         });
 
         $(document).ready(function() {
-          $("select[name='categories_chosen']").multiselect();
-          $("select[name='persons_chosen']").multiselect();
+          $("select[name='categories_chosen_1']").multiselect();
+          $("select[name='categories_chosen_2']").multiselect();
+          $("select[name='categories_chosen_3']").multiselect();
+          $("select[name='categories_chosen_4']").multiselect();
+          $("select[name='categories_chosen_5']").multiselect();
+          $("select[name='persons_chosen_1']").multiselect();
+          $("select[name='persons_chosen_2']").multiselect();
+          $("select[name='persons_chosen_3']").multiselect();
+          $("select[name='persons_chosen_4']").multiselect();
+          $("select[name='persons_chosen_5']").multiselect();
+
           $("select[name='display']").multiselect();
         });
 
         function upperCaseFirstLetter(string) {
             return string.charAt(0).toUpperCase() + string.slice(1);
         }
-
-        // $("#more_data_button").on("click", function() {
-        //   // APPEND HTML
-        //   var last_row_selector = $(".filter_row").last();
-        //   var new_row_id = parseInt(last_row_selector.attr("id").replace("row", ""));
-        //   new_row_id++;
-
-        //   var categories_str = "";
-        //   for (var i = 0; i < categories.length; i++) {
-        //     categories_str += "<option value=" + categories[i] + ">" + upperCaseFirstLetter(categories[i]) + "</option>";
-        //   }
-
-        //   var persons_str = "";
-        //   for (var i = 0; i < persons.length; i++) {
-        //     persons_str += "<option value=" + persons[i] + ">" + upperCaseFirstLetter(persons[i]) + "</option>";
-        //   }
-
-        //   $("#filter_rows").append(
-
-
-        //   '<div class="row filter_row" id="row'+new_row_id+'"><div class="col-md-1">' +
-        //   '<br><br><p><button id="more_data_button">+</button></p></div>' +
-        //   '<div class="col-md-5"><label>Categories:</label><br><select name="categories_chosen" multiple>' +
-        //   categories_str + '</select></div><div class="col-md-6"><label>Persons:</label><br>' +
-        //   '<select name="persons_chosen" multiple>' + persons_str + '</select></div></div>'
-
-        //   );
-
-        //   // REMOVE LAST + BUTTON AFTER ADDING ROW
-
-        // });
-
     </script>
 
   </div>
