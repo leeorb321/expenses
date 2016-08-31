@@ -62,24 +62,56 @@ function updateCharts(aggregatedData, categories, persons, chartObject) {
         }
     }
 
-    drawCharts(aggregatedData, chartType, dateFrom[0], dateTo[0], categoriesChosen[0], personsChosen[0], display, chartObject);
+    drawCharts(aggregatedData, chartType, dateFrom, dateTo, categoriesChosen, personsChosen, display, chartObject);
 }
 
 function drawCharts(aggregatedData, chartType, dateFrom, dateTo, categoriesSelected, personsSelected, display, chartObject) {
 
-    if (dateFrom === "None") {
-        dateFrom = moment(aggregatedData[0].date);
+    var minDate,
+        maxDate,
+        totalCategories = [],
+        totalPersons = [];
+
+    //minDate here
+    //maxDate here
+    categoriesSelected.forEach(function(bin) {
+        bin.forEach(function(element) {
+            if (totalCategories.indexOf(element) === -1) {
+                totalCategories.push(element);
+            }
+        });
+    });
+
+    personsSelected.forEach(function(bin) {
+        bin.forEach(function(element) {
+            if (totalPersons.indexOf(element) === -1) {
+                totalPersons.push(element);
+            }
+        });
+    });
+
+    if (dateFrom.indexOf("None") > -1) {
+        minDate = moment(aggregatedData[0].date);
     }
     else {
-        dateFrom = moment(new Date(dateFrom));
+        minDate = moment(dateFrom.reduce(function (prev, element) { 
+            return moment(element).diff(moment(prev)) < 0 ? element : prev;
+        }));
     }
 
-    if (dateTo === "None") {
-        dateTo = moment(aggregatedData[aggregatedData.length - 1].date);
+    if (dateTo.indexOf("None") > -1) {
+        maxDate = moment(aggregatedData[aggregatedData.length - 1].date);
     }
     else {
-        dateTo = moment(new Date(dateTo));
+        maxDate = moment(dateTo.reduce(function (prev, element) { 
+            return moment(element).diff(moment(prev)) > 0 ? element : prev;
+        }));
     }
+
+    console.log(minDate);
+    console.log(maxDate);
+    console.log(totalCategories);
+    console.log(totalPersons);
 
     var incrementedDate = moment(dateFrom);
 
