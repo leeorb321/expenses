@@ -51,6 +51,7 @@
 
         <div id="filter_rows">
         <div id="filters-1">
+          <h3>Filter 1</h3>
           <div class="row">
 
             <div class="col-md-5 col-md-offset-1">
@@ -97,6 +98,7 @@
           </div>
 
         <div id="filters-2" hidden>
+        <h3>Filter 2</h3>
           <div class="row">
 
             <div class="col-md-5 col-md-offset-1">
@@ -144,6 +146,7 @@
           </div>
 
           <div id="filters-3" hidden>
+          <h3>Filter 3</h3>
           <div class="row">
 
             <div class="col-md-5 col-md-offset-1">
@@ -191,6 +194,7 @@
           </div>
           
           <div id="filters-4" hidden>
+          <h3>Filter 4</h3>
           <div class="row">
 
             <div class="col-md-5 col-md-offset-1">
@@ -238,6 +242,7 @@
           </div>
 
           <div id="filters-5" hidden>
+          <h3>Filter 5</h3>
           <div class="row">
 
             <div class="col-md-5 col-md-offset-1">
@@ -307,7 +312,7 @@
           aggregatedData[i].date = new Date(aggregatedData[i].date);
         }
 
-        var mainChart = drawCharts(aggregatedData, "{{chartType}}", ["{{dateFrom}}"], ["{{dateTo}}"], [{{categoriesSelected|tojson}}], [{{personsSelected|tojson}}], "{{display}}");
+        let mainChart = drawCharts(aggregatedData, "{{chartType}}", ["{{dateFrom}}"], ["{{dateTo}}"], [{{categoriesSelected|tojson}}], [{{personsSelected|tojson}}], "{{display}}");
 
         $("#submit-button").on("click", function() {
             updateCharts(aggregatedData, categories, persons, mainChart);

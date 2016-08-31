@@ -72,8 +72,6 @@ function drawCharts(aggregatedData, chartType, dateFrom, dateTo, categoriesSelec
         totalCategories = [],
         totalPersons = [];
 
-    //minDate here
-    //maxDate here
     categoriesSelected.forEach(function(bin) {
         bin.forEach(function(element) {
             if (totalCategories.indexOf(element) === -1) {
@@ -95,7 +93,7 @@ function drawCharts(aggregatedData, chartType, dateFrom, dateTo, categoriesSelec
     }
     else {
         minDate = moment(dateFrom.reduce(function (prev, element) { 
-            return moment(element).diff(moment(prev)) < 0 ? element : prev;
+            return moment(element).isSameOrBefore(moment(prev)) ? element : prev;
         }));
     }
 
@@ -104,30 +102,25 @@ function drawCharts(aggregatedData, chartType, dateFrom, dateTo, categoriesSelec
     }
     else {
         maxDate = moment(dateTo.reduce(function (prev, element) { 
-            return moment(element).diff(moment(prev)) > 0 ? element : prev;
+            return moment(element).isSameOrAfter(moment(prev)) ? element : prev;
         }));
     }
 
-    console.log(minDate);
-    console.log(maxDate);
-    console.log(totalCategories);
-    console.log(totalPersons);
+    var displayBins = [],
+        incrementedDate = moment(minDate);
 
-    var incrementedDate = moment(dateFrom);
-
-    var displayBins = [];
 
     if (display == "category") {
-        displayBins = categoriesSelected;
+        displayBins = totalCategories;
     }
     else if (display == "person") {
-        displayBins = personsSelected;
+        displayBins = totalPersons;
     }
     else if (display == "year") {
 
         incrementedDate.startOf("year");
 
-        while (incrementedDate.isSameOrBefore(dateTo)) {
+        while (incrementedDate.isSameOrBefore(maxDate)) {
             displayBins.push(incrementedDate.format("YYYY"));
             incrementedDate.add(1, "y");
         }
@@ -136,7 +129,7 @@ function drawCharts(aggregatedData, chartType, dateFrom, dateTo, categoriesSelec
 
         incrementedDate.startOf("month");
 
-        while (incrementedDate.isSameOrBefore(dateTo)) {
+        while (incrementedDate.isSameOrBefore(maxDate)) {
             displayBins.push(incrementedDate.format("MMM YYYY"));
             incrementedDate.add(1, "M");
         }
@@ -145,88 +138,132 @@ function drawCharts(aggregatedData, chartType, dateFrom, dateTo, categoriesSelec
 
         incrementedDate.startOf("week");
 
-        while (incrementedDate.isSameOrBefore(dateTo)) {
+        while (incrementedDate.isSameOrBefore(maxDate)) {
             displayBins.push("Week of " + incrementedDate.format("MMM Do, YYYY"));
             incrementedDate.add(1, "w");
         }
     }
     else if (display == "day") {
 
-        while (incrementedDate.isSameOrBefore(dateTo)) {
+        while (incrementedDate.isSameOrBefore(maxDate)) {
             displayBins.push(incrementedDate.format("MMM Do, YYYY"));
             incrementedDate.add(1, "d");
         }
     }
 
-    var amounts = {};
-    for (var i = 0; i < displayBins.length; i++) {
-        amounts[displayBins[i]] = 0;
+    var amounts = [];
+    // categoriesSelected.length here is an arbitrary choice--could be persons, dates, etc.
+    // All will be arrays of length representing the number of filters the user has open
+    for (var j = 0; j < categoriesSelected.length; j++) {
+        amounts.push({});
+        for (var i = 0; i < displayBins.length; i++) {
+            amounts[j][displayBins[i]] = 0;
+        }
     }
 
-    for (i = 0; i < aggregatedData.length; i++) {
+    for (var j = 0; j < amounts.length; j ++) {
+        for (i = 0; i < aggregatedData.length; i++) {
 
-        var checkDateFrom = moment(aggregatedData[i].date).isSameOrAfter(dateFrom);
-        var checkDateTo = moment(aggregatedData[i].date).isSameOrBefore(dateTo);
-        var checkPersons = personsSelected.indexOf(aggregatedData[i].person.toLowerCase()) > -1;
-        var checkCategories = categoriesSelected.indexOf(aggregatedData[i].category.toLowerCase()) > -1;
-        var dateGroups = ["year", "month", "week", "day"];
-
-        if (checkDateFrom && checkDateTo && checkCategories && checkPersons) {
-
-            if (display == "category") {
-                amounts[aggregatedData[i].category.toLowerCase()] += aggregatedData[i].amount;
+            if (dateFrom[j] === "None") {
+                var checkDateFrom = moment(aggregatedData[i].date).isSameOrAfter(minDate)
             }
-            else if (display == "person") {
-                amounts[aggregatedData[i].person.toLowerCase()] += aggregatedData[i].amount;
+            else {
+                var checkDateFrom = moment(aggregatedData[i].date).isSameOrAfter(moment(dateFrom[j]))
             }
-            else if (dateGroups.indexOf(display) >= 0) {
-                groupbyDate(display, aggregatedData[i], amounts);
+
+            if (dateTo[j] === "None") {
+                var checkDateTo = moment(aggregatedData[i].date).isSameOrBefore(maxDate)
+            }
+            else {
+                var checkDateTo = moment(aggregatedData[i].date).isSameOrBefore(moment(dateTo[j]))
+            }
+
+            var checkPersons = personsSelected[j].indexOf(aggregatedData[i].person.toLowerCase()) > -1;
+            var checkCategories = categoriesSelected[j].indexOf(aggregatedData[i].category.toLowerCase()) > -1;
+            var dateGroups = ["year", "month", "week", "day"];
+
+            if (checkDateFrom && checkDateTo && checkCategories && checkPersons) {
+
+                if (display == "category") {
+                    amounts[j][aggregatedData[i].category.toLowerCase()] += aggregatedData[i].amount;
+                }
+                else if (display == "person") {
+                    amounts[j][aggregatedData[i].person.toLowerCase()] += aggregatedData[i].amount;
+                }
+                else if (dateGroups.indexOf(display) >= 0) {
+                    groupbyDate(display, aggregatedData[i], amounts[j]);
+                }
             }
         }
     }
 
-    var total,
-        newBins = [];
-    for (i = 0; i < displayBins.length; i++) {
-        total = parseFloat(Math.round(amounts[displayBins[i]] * 100) / 100).toFixed(2);
-        if (total !== '0.00') {
-            amounts[displayBins[i]] = total;
-            newBins.push(displayBins[i]);
-        }
-        else {
-            delete amounts[displayBins[i]];
-        }
-    }
-    displayBins = newBins;
+    // var total,
+    //     newBins = [];
+    // for (i = 0; i < displayBins.length; i++) {
+    //     total = parseFloat(Math.round(amounts[displayBins[i]] * 100) / 100).toFixed(2);
+    //     if (total !== '0.00') {
+    //         amounts[displayBins[i]] = total;
+    //         newBins.push(displayBins[i]);
+    //     }
+    //     else {
+    //         delete amounts[displayBins[i]];
+    //     }
+    // }
+    // displayBins = newBins;
 
-    var chartLabels = Object.keys(amounts).map(function(k) {
-        return k.charAt(0).toUpperCase() + k.slice(1);
+    // var chartLabels = Object.keys(displayBins).map(function(k) {
+    //     return k.charAt(0).toUpperCase() + k.slice(1);
+    // });
+
+    var chartLabels = displayBins.map(function(element) {
+        return element.charAt(0).toUpperCase() + element.slice(1);
     });
 
     var amountsData = [];
-    let chartColors = [];
-    for (var i = 0; i < displayBins.length; i++) {
-      amountsData.push(amounts[displayBins[i]]);
-      chartColors.push("rgba(" + randRGB() + ", " + randRGB() + ", " + randRGB() + ", 1)");
+    for (var j = 0; j < amounts.length; j++) {
+        amountsData.push([]);
+        for (var i = 0; i < displayBins.length; i++) {
+          amountsData[j].push(amounts[j][displayBins[i]]);
+        }
+    }
+
+    var datasets = [];
+    if (amounts.length === 1) {
+        var chartColors = [];
+            for (var i = 0; i < displayBins.length; i++) {
+                chartColors.push("rgba(" + randRGB() + ", " + randRGB() + ", " + randRGB() + ", 1)");
+            }
+        datasets.push({
+            label: "Filter 1",
+            backgroundColor: chartColors,
+            borderColor: chartColors,
+            data: amountsData[0],
+            fill: false,
+        });
+    }
+    else {
+        for (var i = 0; i < amounts.length; i++) {
+            var genColor = "rgba(" + randRGB() + ", " + randRGB() + ", " + randRGB() + ", 1)";
+            datasets.push({
+                label: "Filter " + (i + 1),
+                fill: false,
+                backgroundColor: genColor,
+                borderColor: genColor,
+                data: amountsData[i],
+            });
+        }
     }
 
     var chartData = {
         labels: chartLabels,
-        datasets: [
-            {
-                backgroundColor: chartColors,
-                data: amountsData
-            }
-        ]
+        datasets: datasets
     };
 
     if (chartObject != null) {
         chartObject.destroy();
-        var dataChart = chartObject;
+        canvas.clearRect(0, 0, canvas.width, canvas.height);
     }
-    else {
-        var dataChart;
-    }
+    let dataChart;
 
     if (chartType == "pie") {
         dataChart = new Chart(canvas, {
