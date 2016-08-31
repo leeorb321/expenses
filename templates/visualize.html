@@ -70,7 +70,7 @@
             <div class="col-md-1">
               <br><br>
               <p>
-              <button id="more_data_button">+</button>
+              <button id="more-data-1">+</button>
               </p>
             </div>
 
@@ -98,7 +98,8 @@
             <div class="col-md-1">
               <br><br>
               <p>
-              <button id="more_data_button">+</button>
+              <button id="more-data-2">+</button>
+              <button id="less-data-2">-</button>
               </p>
             </div>
 
@@ -126,7 +127,8 @@
             <div class="col-md-1">
               <br><br>
               <p>
-              <button id="more_data_button">+</button>
+              <button id="more-data-3">+</button>
+              <button id="less-data-3">-</button>
               </p>
             </div>
 
@@ -154,7 +156,8 @@
             <div class="col-md-1">
               <br><br>
               <p>
-              <button id="more_data_button">+</button>
+              <button id="more-data-4">+</button>
+              <button id="less-data-4">-</button>
               </p>
             </div>
 
@@ -182,7 +185,7 @@
             <div class="col-md-1">
               <br><br>
               <p>
-              <button id="more_data_button">+</button>
+              <button id="less-data-5">-</button>
               </p>
             </div>
 
@@ -234,6 +237,52 @@
 
         $("#submit-button").on("click", function() {
             updateCharts(aggregatedData, categories, persons, mainChart);
+        });
+
+        $("#more-data-1").on("click", function() {
+          $("#row2").show();
+          $("#more-data-1").hide();
+        });
+
+        $("#more-data-2").on("click", function() {
+          $("#row3").show();
+          $("#less-data-2").hide();
+          $("#more-data-2").hide();
+        });
+
+        $("#more-data-3").on("click", function() {
+          $("#row4").show();
+          $("#less-data-3").hide();
+          $("#more-data-3").hide();
+        });
+
+        $("#more-data-4").on("click", function() {
+          $("#row5").show();
+          $("#less-data-4").hide();
+          $("#more-data-4").hide();
+        });
+
+        $("#less-data-2").on("click", function() {
+          $("#row2").hide();
+          $("#more-data-1").show();
+        });
+
+        $("#less-data-3").on("click", function() {
+          $("#row3").hide();
+          $("#more-data-2").show();
+          $("#less-data-2").show();
+        });
+
+        $("#less-data-4").on("click", function() {
+          $("#row4").hide();
+          $("#more-data-3").show();
+          $("#less-data-3").show();
+        });
+
+        $("#less-data-5").on("click", function() {
+          $("#row5").hide();
+          $("#more-data-4").show();
+          $("#less-data-4").show();
         });
 
         $(document).ready(function() {
