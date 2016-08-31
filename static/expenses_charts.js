@@ -9,26 +9,34 @@ function updateCharts(aggregatedData, categories, persons, chartObject) {
     else
         chartType = chartSelector.value;
 
-    var dateFromSelector = $("input[name=date_from]")[0];
-    if (dateFromSelector.value === '')
-        dateFrom = 'None';
+    var displaySelector = $("select[name=display]")[0];
+    if (displaySelector.value === '')
+        display = 'category';
     else
-        dateFrom = dateFromSelector.value;
-
-    var dateToSelector = $("input[name=date_to]")[0];
-    if (dateToSelector.value === '')
-        dateTo = 'None';
-    else
-        dateTo = (dateToSelector.value === '');
+        display = displaySelector.value;
 
     var categoriesChosen = [];
+    var personsChosen = [];
+    var dateTo = [];
+    var dateFrom = [];
 
     for (var i = 0; i < 5; i++) {
-        var selectorString = "select[name=categories_chosen_" + (i + 1) + "]";
-        if ( $("#row" + (i + 1)).is(":hidden") ) {
-            categoriesChosen.push([]);
-        }
-        else {
+        if ($("#filters-" + (i + 1)).is(":visible")) {
+
+            var dateFromSelector = $("input[name=date_from_" + (i + 1) + "]")[0];
+            if (dateFromSelector.value === '')
+                dateFrom.push('None');
+            else
+                dateFrom.push(dateFromSelector.value);
+
+            var dateToSelector = $("input[name=date_to_" + (i + 1) + "]")[0];
+            if (dateToSelector.value === '')
+                dateTo.push('None');
+            else
+                dateTo.push(dateToSelector.value);
+
+
+            var selectorString = "select[name=categories_chosen_" + (i + 1) + "]";
             var categorySelector = $(selectorString)[0];
             if (categorySelector.value === '')
                 categoriesChosen.push(categories);
@@ -39,17 +47,8 @@ function updateCharts(aggregatedData, categories, persons, chartObject) {
                         categoriesChosen[i].push(categorySelector.options[j].value);
                 }
             }
-        }
-    }
 
-    var personsChosen = [];
-
-    for (var i = 0; i < 5; i++) {
-        var selectorString = "select[name=persons_chosen_" + (i + 1) + "]";
-        if ( $("#row" + (i + 1)).is(":hidden") ) {
-            personsChosen.push([]);
-        }
-        else {
+            var selectorString = "select[name=persons_chosen_" + (i + 1) + "]";
             var personsSelector = $(selectorString)[0];
             if (personsSelector.value === '')
                 personsChosen.push(persons);
@@ -63,13 +62,7 @@ function updateCharts(aggregatedData, categories, persons, chartObject) {
         }
     }
 
-    var displaySelector = $("select[name=display]")[0];
-    if (displaySelector.value === '')
-        display = 'category';
-    else
-        display = displaySelector.value;
-
-    drawCharts(aggregatedData, chartType, dateFrom, dateTo, categoriesChosen[0], personsChosen[0], display, chartObject);
+    drawCharts(aggregatedData, chartType, dateFrom[0], dateTo[0], categoriesChosen[0], personsChosen[0], display, chartObject);
 }
 
 function drawCharts(aggregatedData, chartType, dateFrom, dateTo, categoriesSelected, personsSelected, display, chartObject) {
