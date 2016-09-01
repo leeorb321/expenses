@@ -7,7 +7,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return redirect('/retrieve_data')
 
 @app.route('/submit_expense', methods=['GET','POST'])
 def submit_page():
@@ -101,7 +101,7 @@ def backup_db():
     backup_name = str(datetime.now()).replace(':','-')
     bu_command = 'pg_dump expenses > %s' % backup_name
     system(bu_command)
-    redirect('/')
+    redirect(request.referrer)
 
 if __name__ == '__main__':
     if 'HEROKU_CHECK' in os.environ:
