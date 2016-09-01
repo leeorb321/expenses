@@ -19,10 +19,10 @@ def submit_page():
             persons=persons
         )
     elif request.method == 'POST':
-        person = request.form['person']
+        person = (request.form['person']).lower()
         expense_date = request.form['expense_date']
         amount = int(float(request.form['amount'])*100)
-        category = request.form['category']
+        category = (request.form['category']).lower()
         description = request.form['description']
 
         new_expense(person, expense_date, amount, category, description)
@@ -31,7 +31,7 @@ def submit_page():
 
 @app.route('/add_category', methods=['POST'])
 def add_category():
-    category = request.form['category_name']
+    category = (request.form['category_name']).lower()
 
     new_category(category)
 
