@@ -12,7 +12,7 @@
     <table id="datatable" align="center" class="table table-striped">
       <thead>
         <tr>
-          <th id="edit">Edit/Delete</th>
+          <th id="edit"></th>
           <th id="date">Transaction Date</th>
           <th id="amount">Amount</th>
           <th id="category">Category</th>
@@ -24,7 +24,7 @@
         {% for row in data %}
           <tr id="row{{row['id']}}">
             <td>
-            <button type="button" data-toggle="modal" data-target="#modify_modal">Edit/Delete</button></td>
+            <button type="button" class="btn btn-secondary"data-toggle="modal" data-target="#modify_modal">Edit</button></td>
             <td id="date">{{ row['date'] }}</td>
             <td id="amount">{{ "${:.2f}".format(row['amount']|float) }}</td>
             <td id="category">{{ row['category'] }}</td>
@@ -35,40 +35,63 @@
       </tbody>
     </table>
 
-    <div id="modify_modal" class="modal fade" role="dialog">
+    <div id="modify_modal" class="modal fade modal-lg" role="dialog">
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4 class="modal-title">Modal Header</h4>
+          <h4 class="modal-title">Edit</h4>
         </div>
         <div class="modal-body">
-          <h2>Edit Entry</h2>
           <form id="modify_form" action="update_entry" method="post" role="form">
             <input type="text" name="txn_id" hidden />
-            <label>Transaction Date:</label>
-              <input type="date" class="form-control" name="date" />
-            <label>Amount:</label>
-              <input type="text" class="form-control" name="amount" />
-            <label>Category:</label>
-              <select name='category' class="form-control" name="category">
-                {% for category in categories %}
-                    <option value='{{ category }}'>{{ category.capitalize() }}</option>
-                {% endfor %}
-              </select>
-            <label>Description:</label>
-              <input type="text" class="form-control" name="description" />
-            <label>Person:</label>
-              <select name='person' class="form-control" name="person">
-                {% for person in persons %}
-                    <option value='{{ person }}'>{{ person.capitalize() }}</option>
-                {% endfor %}
-              </select>
-              <input type='submit' id="submit-form" value='Submit' />
-            </form>
-            <button id="delete">Delete</button>
+            <div class="col-md-6">
+              <div class="row">
+                <label>Date</label>
+                <input type="date" class="form-control" name="date" class="form-control"/>
+              </div>
+              <div class="row">
+                <label>Amount</label>
+                <input type="text" class="form-control" name="amount" class="form-control"/>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="row">
+                <label>Category</label>
+                  <select name='category' class="form-control" name="category">
+                    {% for category in categories %}
+                        <option value='{{ category }}'>{{ category.capitalize() }}</option>
+                    {% endfor %}
+                  </select>
+              </div>
+              <div class="row">
+                <label>Person</label>
+                  <select name='person' class="form-control" name="person">
+                    {% for person in persons %}
+                        <option value='{{ person }}'>{{ person.capitalize() }}</option>
+                    {% endfor %}
+                  </select>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+              <label>Description:</label>
+                  <input type="text" class="form-control" name="description" />
+              </div>
+            </div>
+            <br>
+            <div class="row">
+              <div class="col-md-1">
+                <input type='submit' id="submit-form" value='Submit' class="btn btn-primary"/>
+              </div>
+
+              </form>
+              <div class="col-md-1">
+                <button id="delete" class="btn btn-danger">Delete</button>
+              </div>
+            </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
         </div>
       </div>
     </div>

@@ -6,6 +6,12 @@
     padding: 20px;
 }
 
+.modal {
+    position: absolute;
+    top: 20%;
+    left: 17%;
+}
+
 .new-expense {
     text-align: left;
     font-size: 0.8em;
