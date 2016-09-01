@@ -14,7 +14,7 @@ function mutateRGB(seed, minimum, maximum) {
     if (generated >= 0) {
         var corrected = Math.max(minimum, generated)
     }
-    
+
     return parseInt(Math.max(0, Math.min(255, corrected + seed)));
 }
 
@@ -108,7 +108,7 @@ function drawCharts(aggregatedData, chartType, dateFrom, dateTo, categoriesSelec
         minDate = moment(aggregatedData[0].date);
     }
     else {
-        minDate = moment(dateFrom.reduce(function (prev, element) { 
+        minDate = moment(dateFrom.reduce(function (prev, element) {
             return moment(element).isSameOrBefore(moment(prev)) ? element : prev;
         }));
     }
@@ -117,7 +117,7 @@ function drawCharts(aggregatedData, chartType, dateFrom, dateTo, categoriesSelec
         maxDate = moment(aggregatedData[aggregatedData.length - 1].date);
     }
     else {
-        maxDate = moment(dateTo.reduce(function (prev, element) { 
+        maxDate = moment(dateTo.reduce(function (prev, element) {
             return moment(element).isSameOrAfter(moment(prev)) ? element : prev;
         }));
     }
@@ -290,7 +290,7 @@ function drawCharts(aggregatedData, chartType, dateFrom, dateTo, categoriesSelec
         labels: chartLabels,
         datasets: datasets
     };
- 
+
     if (chartObject.length > 0) {
         chartObject[0].destroy();
         canvas.clearRect(0, 0, canvas.width, canvas.height);
@@ -303,6 +303,7 @@ function drawCharts(aggregatedData, chartType, dateFrom, dateTo, categoriesSelec
         type: chartType,
         data: chartData
     }));
+
 }
 
 function groupbyDate(period, row, amounts) {

@@ -12,6 +12,10 @@
     left: 17%;
 }
 
+.modal-open {
+    overflow: scroll;
+}
+
 /*.new-expense {
     text-align: left;
     font-size: 0.8em;

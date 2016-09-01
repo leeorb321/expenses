@@ -138,6 +138,7 @@
         var check = confirm("Are you sure you want to delete this entry?");
 
         if (check) {
+          e.preventDefault();
           $.ajax({
             type: "DELETE",
             url: "/delete_entry",
