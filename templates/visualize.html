@@ -25,7 +25,7 @@
 
         <div class="row">
 
-          <div class="col-md-5 col-md-offset-1">
+          <div class="col-md-6">
             <label>Chart Type:</label>
             <select name="chart_type" class="form-control">
               <option value="pie">Pie</option>
@@ -83,20 +83,20 @@
                 {% endfor %}
               </select>
             </div>
+            </div>
             <div class="row">
-              <div class="col-md-1">
+              <br>
+              <div class="col-md-2">
                 <button class="btn btn-primary" id="more-data-1">+</button>
               </div>
             </div>
+            <hr>   
           </div> 
-          <hr>   
-          </div>
 
         <div id="filters-2" hidden>
-        <h3>Filter 2</h3>
+          <h3>Filter 2</h3>
           <div class="row">
-
-            <div class="col-md-5 col-md-offset-1">
+            <div class="col-md-6">
               <label>Start Date:</label>
               <input type="date" name="date_from_2" class="form-control">
             </div>
@@ -109,16 +109,7 @@
           </div>
           <br>
           <div class="row">
-
-            <div class="col-md-1">
-              <br><br>
-              <p>
-              <button id="more-data-2">+</button>
-              <button id="less-data-2">-</button>
-              </p>
-            </div>
-
-            <div class="col-md-5">
+            <div class="col-md-6">
               <label>Categories:</label><br>
               <select name="categories_chosen_2" multiple>
                 {% for category in categories%}
@@ -135,16 +126,21 @@
                 {% endfor %}
               </select>
             </div>
-
+            </div>
+            <div class="row">
+              <br>
+              <div class="col-md-2">
+                <button class="btn btn-primary" id="more-data-2">+</button>
+                <button class="btn btn-primary" id="less-data-2">-</button>
+              </div>
+            </div>
+            <hr>   
           </div> 
-          <hr>   
-          </div>
 
           <div id="filters-3" hidden>
           <h3>Filter 3</h3>
           <div class="row">
-
-            <div class="col-md-5 col-md-offset-1">
+            <div class="col-md-6">
               <label>Start Date:</label>
               <input type="date" name="date_from_3" class="form-control">
             </div>
@@ -157,16 +153,7 @@
           </div>
           <br>
           <div class="row">
-
-            <div class="col-md-1">
-              <br><br>
-              <p>
-              <button id="more-data-3">+</button>
-              <button id="less-data-3">-</button>
-              </p>
-            </div>
-
-            <div class="col-md-5">
+            <div class="col-md-6">
               <label>Categories:</label><br>
               <select name="categories_chosen_3" multiple>
                 {% for category in categories%}
@@ -183,16 +170,21 @@
                 {% endfor %}
               </select>
             </div>
-
+            </div>
+            <div class="row">
+              <br>
+              <div class="col-md-2">
+                <button class="btn btn-primary" id="more-data-3">+</button>
+                <button class="btn btn-primary" id="less-data-3">-</button>
+              </div>
+            </div>
+              <hr>   
           </div> 
-          <hr>   
-          </div>
-          
+
           <div id="filters-4" hidden>
           <h3>Filter 4</h3>
           <div class="row">
-
-            <div class="col-md-5 col-md-offset-1">
+            <div class="col-md-6">
               <label>Start Date:</label>
               <input type="date" name="date_from_4" class="form-control">
             </div>
@@ -205,16 +197,7 @@
           </div>
           <br>
           <div class="row">
-
-            <div class="col-md-1">
-              <br><br>
-              <p>
-              <button id="more-data-4">+</button>
-              <button id="less-data-4">-</button>
-              </p>
-            </div>
-
-            <div class="col-md-5">
+            <div class="col-md-6">
               <label>Categories:</label><br>
               <select name="categories_chosen_4" multiple>
                 {% for category in categories%}
@@ -231,16 +214,21 @@
                 {% endfor %}
               </select>
             </div>
-
+            </div>
+            <div class="row">
+              <br>
+              <div class="col-md-2">
+                <button class="btn btn-primary" id="more-data-4">+</button>
+                <button class="btn btn-primary" id="less-data-4">-</button>
+              </div>
+            </div>
+            <hr>   
           </div> 
-          <hr>   
-          </div>
 
           <div id="filters-5" hidden>
           <h3>Filter 5</h3>
           <div class="row">
-
-            <div class="col-md-5 col-md-offset-1">
+            <div class="col-md-6">
               <label>Start Date:</label>
               <input type="date" name="date_from_5" class="form-control">
             </div>
@@ -253,15 +241,7 @@
           </div>
           <br>
           <div class="row">
-
-            <div class="col-md-1">
-              <br><br>
-              <p>
-              <button id="less-data-5">-</button>
-              </p>
-            </div>
-
-            <div class="col-md-5">
+            <div class="col-md-6">
               <label>Categories:</label><br>
               <select name="categories_chosen_5" multiple>
                 {% for category in categories%}
@@ -278,15 +258,20 @@
                 {% endfor %}
               </select>
             </div>
-
+            </div>
+            <div class="row">
+              <div class="col-md-1">
+              <br>
+                <button class="btn btn-primary" id="less-data-5">-</button>
+              </div>
+            </div>
+            <hr>   
           </div> 
-          <hr>   
-          </div>
 
         </div>
         <div class="row">
-          <div class="col-md-1">
-            <br>
+          <br>
+          <div class="col-md-2">
             <button class="btn btn-primary" id="submit-button">Update</button>
           </div>
         </div>
