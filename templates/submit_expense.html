@@ -1,6 +1,5 @@
 
 <script type="text/javascript">
-
 function checkAdd() {
 
   var selectedOption = $("select[name=category] option:selected").text();
@@ -11,12 +10,14 @@ function checkAdd() {
   else
     $("#new_category").hide();
 }
-
 </script>
 
 {% extends "layout.html" %}
-{% block title %}New Expense{% endblock %}
+{% block title %}Submit{% endblock %}
 {% block content %}
+    <script type="text/javascript">
+      $("#submit-nav").addClass("active");
+    </script>
   <div class=page>
     <div class=new-expense>
 

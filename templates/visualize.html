@@ -1,6 +1,10 @@
 {% extends "layout.html" %}
-{% block title %}Visualize Data{% endblock %}
+{% block title %}Visualize{% endblock %}
 {% block content %}
+
+  <script type="text/javascript">
+    $("#visualize-nav").addClass("active");
+  </script>
 
   <script type="text/javascript" src="{{ url_for('static', filename='expenses_charts.js') }}"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.2.1/Chart.js"></script>
@@ -264,7 +268,7 @@
       <div class="col-md-6">
             <div class="row">
               <div class="col-md-12" id="canvas-container">
-                <canvas id="all-data" width="100vw" height="100vh"></canvas>
+                <canvas id="all-data" width="100%" height="100%"></canvas>
               </div>
             <div class="row">
           </div>

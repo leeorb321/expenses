@@ -16,17 +16,17 @@
 
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 
-    <title>{% block title %}{% endblock %}Expenses</title>
+    <title>{% block title %}{% endblock %} - Expenses</title>
     {% endblock %}
   </head>
   <body>
     <div id="content">
     <div class="header">
       <ul class="nav nav-pills">
-        <li role="presentation" class="active"><a href="{{ url_for('retrieve_data') }}">Retrieve</a></li>
-        <li role="presentation"><a href="{{ url_for('submit_page') }}">Submit</a></li>
-        <li role="presentation"><a href="{{ url_for('visualize') }}">Visualize</a></li>
-        <li role="presentation"><a href="{{url_for('backup_db') }}">Backup</a></li>
+        <li id="retrieve-nav" class="" role="presentation"><a href="{{ url_for('retrieve_data') }}">Retrieve</a></li>
+        <li id="submit-nav" class="" role="presentation"><a href="{{ url_for('submit_page') }}">Submit</a></li>
+        <li id="visualize-nav" class="" role="presentation"><a href="{{ url_for('visualize') }}">Visualize</a></li>
+        <li id="backup-nav" class="" role="presentation"><a href="{{url_for('backup_db') }}">Backup</a></li>
       </ul>
         {% block content %}{% endblock %}
       </div>
