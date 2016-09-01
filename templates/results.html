@@ -44,18 +44,18 @@
         <div class="modal-body">
           <form id="modify_form" action="update_entry" method="post" role="form">
             <input type="text" name="txn_id" hidden />
-            <div class="col-md-6">
-              <div class="row">
+            <div class="row">
+              <div class="col-md-6">
                 <label>Date</label>
                 <input type="date" class="form-control" name="date" class="form-control"/>
               </div>
-              <div class="row">
+              <div class="col-md-6">
                 <label>Amount</label>
                 <input type="text" class="form-control" name="amount" class="form-control"/>
               </div>
             </div>
-            <div class="col-md-6">
-              <div class="row">
+            <div class="row">
+              <div class="col-md-6">
                 <label>Category</label>
                   <select name='category' class="form-control" name="category">
                     {% for category in categories %}
@@ -63,7 +63,7 @@
                     {% endfor %}
                   </select>
               </div>
-              <div class="row">
+              <div class="col-md-6">
                 <label>Person</label>
                   <select name='person' class="form-control" name="person">
                     {% for person in persons %}

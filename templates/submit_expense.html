@@ -22,29 +22,56 @@ function checkAdd() {
     <div class=new-expense>
 
       <form id='new_expense_form' method='post' action='submit_expense' >
-        <p>
-      Person:     <select name='person'>
-                  {% for person in persons %}
-                      <option value='{{ person }}'>{{ person.capitalize() }}</option>
-                  {% endfor %}
-                  </select>
-      Date:       <input type='date' name='expense_date'  id='expense_date'/>
-      Amount:     <input type='number' min='0.01' step='0.01' name='amount' />
-      </p><p>
-      Category:   <select name='category' onChange='checkAdd()'>
-                  {% for category in categories %}
-                      <option value='{{ category }}'>{{ category.capitalize() }}</option>
-                  {% endfor %}
-                      <option value='add_category'>Add Category</option>
-                  </select>
-      Description: <input type='text' name='description' />
-                  <input type='submit' value='Submit' />
+      <div class="row">
+        <div class="col-md-6">
+          <label>Person</label>
+          <select name='person' class="form-control">
+          {% for person in persons %}
+              <option value='{{ person }}'>{{ person.capitalize() }}</option>
+          {% endfor %}
+          </select>
+        </div>
+        <div class="col-md-6">
+          <label>Category</label>
+          <select name='category' class="form-control" onChange='checkAdd()'>
+          {% for category in categories %}
+              <option value='{{ category }}'>{{ category.capitalize() }}</option>
+          {% endfor %}
+              <option value='add_category'>Add Category</option>
+        </select>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <lable>Date</lable>   
+          <input type='date' name='expense_date'  id='expense_date' class="form-control"/>
+        </div>
+        <div class="col-md-6">
+          <label>Amount</label> 
+          <input type='number' min='0.01' step='0.01' name='amount' class="form-control"/>
+        </div>
+      </div>
+       <div class="row">
+        <div class="col-md-12">
+          <label>Description</label>
+          <input type='text' name='description' class="form-control"/>
+        </div>
+      </div>
+      <br>
+      <div class="row">
+        <div class="col-md-12">
+          <input type='submit' id="submit-form" value='Submit' class="btn btn-primary"/>
+        </div>
+      </div>
 
-        </p>
+
       </form>
        <form hidden id='new_category' method='post' action='add_category'>
-          <input type='text' name='category_name'>
-          <input type='submit' value='Add New Category'>
+        <hr>
+          <label>New</label>
+          <input type='text' name='category_name' class="form-control">
+          <br>
+          <input type='submit' class="btn btn-primary" value='Add'>
         </form>
 
     </div>

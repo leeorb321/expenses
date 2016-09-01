@@ -35,7 +35,7 @@ def add_category():
 
     new_category(category)
 
-    return redirect('/')
+    return redirect(request.referrer)
 
 @app.route('/update_entry', methods=['POST'])
 def update_entry():
