@@ -16,14 +16,20 @@
 
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 
-    <title>{% block title %}{% endblock %} - Expense Tracker</title>
+    <title>{% block title %}{% endblock %}Expenses</title>
     {% endblock %}
   </head>
   <body>
     <div id="content">
-      <a href="{{ url_for('index') }}">Home</a>
-      {% block content %}{% endblock %}
+    <div class="header">
+      <ul class="nav nav-pills">
+        <li role="presentation" class="active"><a href="{{ url_for('retrieve_data') }}">Retrieve</a></li>
+        <li role="presentation"><a href="{{ url_for('submit_page') }}">Submit</a></li>
+        <li role="presentation"><a href="{{ url_for('visualize') }}">Visualize</a></li>
+        <li role="presentation"><a href="{{url_for('backup_db') }}">Backup</a></li>
+      </ul>
+        {% block content %}{% endblock %}
+      </div>
     </div>
-    <div id="footer"></div>
   </body>
 </html>
