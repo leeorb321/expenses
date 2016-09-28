@@ -1,14 +1,17 @@
 {
-  "name": "my-app",
+  "name": "expenses",
   "version": "0.1.0",
   "private": true,
-  "devDependencies": {
+  "dependencies": {
+    "bootstrap": "^3.3.7",
+    "jquery": "^3.1.1",
+    "react": "^15.2.1",
+    "react-bootstrap": "^0.30.3",
+    "react-bootstrap-table": "^2.5.4",
+    "react-dom": "^15.2.1",
     "react-scripts": "0.6.1"
   },
-  "dependencies": {
-    "react": "^15.3.2",
-    "react-dom": "^15.3.2"
-  },
+  "proxy": "http://localhost:5000/",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
