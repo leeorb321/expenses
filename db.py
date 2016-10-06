@@ -82,7 +82,7 @@ def new_category(category_name):
 
 def update_expense(new_person, new_date, new_amount, new_category, new_description, txn_id):
     try:
-        conn = psycopg2.connect(database="expenses")
+        conn = check_heroku_db()
         cur = conn.cursor()
 
         query = '''UPDATE ledger SET
@@ -104,7 +104,7 @@ def update_expense(new_person, new_date, new_amount, new_category, new_descripti
 
 def delete_expense(txn_id):
     try:
-        conn = psycopg2.connect(database="expenses")
+        conn = check_heroku_db()
         cur = conn.cursor()
 
         query = "DELETE FROM ledger WHERE id = %s;"
